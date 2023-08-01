@@ -2,6 +2,11 @@
 #include <string>
 #include <tuple>
 
+namespace Core_Math
+{
+	class Mat4x4;
+}
+
 namespace Core_Renderer
 {
 using ShaderID = unsigned int;
@@ -22,6 +27,8 @@ public:
 	void SetUniform1f(const std::string& name, float value);
 
 	void SetUniform1i(const std::string& name, int value);
+
+	void SetUniformMat4f(const std::string& name, const Core_Math::Mat4x4& m4x4);
 
 private:
 

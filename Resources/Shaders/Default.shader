@@ -5,9 +5,12 @@ layout (location = 0) in vec4 postion;
 layout (location = 1) in vec2 texCoord;
 out vec2 v_TexCoord;
 
+uniform float u_Time;
+uniform mat4 u_MVP;
+
 void main()
 {
-    gl_Position = postion;
+    gl_Position = u_MVP * postion ;
     v_TexCoord = texCoord;
 };
 

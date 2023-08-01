@@ -4,7 +4,9 @@
 #include "../include/Event/Event.h"
 #include "../include/Renderer/BufferLayout.h"
 #include "../include/Renderer/Renderer.h"
+#include "../include/Settings.h"
 #include "Logger.h"
+#include "Math/MathUtils.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include <chrono>
@@ -102,10 +104,12 @@ void Application::testFunction(IEvent& e)
 	// create texture
 	mTexture = std::make_unique<Core_Renderer::Texture>("blue_eyes.bmp");
 	mTexture->Bind();
-
 	mShader->SetUniform1i("u_Texture", 0);
 	
 
+	Core_Math::Mat4x4 ortho = Core_Math::Ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+	mShader->SetUniformMat4f("u_MVP", ortho);
+	
 	// unbind everything
 	mShader->Unbind();
 	mVbo->Unbind();

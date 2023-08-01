@@ -9,6 +9,7 @@ using numeral = double;
 using numeral = float;
 #endif
 
-const numeral EPSILON = std::numeric_limits<numeral>::epsilon();
 const numeral MAX_NUMERAL = std::numeric_limits<numeral>::max();
-}
+const numeral EPSILON = std::numeric_limits<numeral>::epsilon();
+
+} // namespace Core_Math

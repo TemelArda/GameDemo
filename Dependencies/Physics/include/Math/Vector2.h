@@ -1,9 +1,8 @@
 #pragma once
-#pragma once
 #include "MathCommon.h"
 #include <initializer_list>
 #include <math.h>
-
+#include <assert.h>
 
 namespace Core_Math
 {
@@ -219,7 +218,7 @@ inline void Vector2::operator*=(numeral value)
 inline const numeral Vector2::operator[](int index) const
 {
 	if (index > 1)
-		return MAX_NUMERAL;
+		assert(false);
 	return (&x)[index];
 }
 
@@ -227,8 +226,7 @@ inline numeral& Vector2::operator[](int index)
 {
 	if (index > 1)
 	{
-		auto t = MAX_NUMERAL;
-		return t; 
+		assert(false);
 	}
 		
 	return (&x)[index];

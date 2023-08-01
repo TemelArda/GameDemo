@@ -3,6 +3,7 @@
 #include "../../include/Renderer/Constants.h"
 #include <GL/glew.h>
 #include <GL/freeglut.h>
+#include "Math/Mat4x4.h"
 #include "Logger.h"
 #include <fstream>
 #include <sstream>
@@ -46,6 +47,12 @@ void Shader::SetUniform1f(const std::string& name, float value)
 void Shader::SetUniform1i(const std::string& name, int value)
 {
 	glUniform1i(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniformMat4f(const std::string& name, const Core_Math::Mat4x4& m4x4)
+{
+	auto p = &m4x4[0][0];
+	glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &m4x4[0][0]);
 }
 
 int Shader::GetUniformLocation(const std::string& name)
