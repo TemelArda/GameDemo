@@ -42,7 +42,7 @@ private:
 	
 	std::tuple<std::string, std::string> ParseShader(const std::string& fp);
 
-	ShaderID CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+	void CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 	
 	ShaderID CompileShader(const std::string& source, uint32_t type);
 

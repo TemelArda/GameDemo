@@ -135,4 +135,21 @@ Mat4x4 Mat4x4::GetIdentity()
 		0, 0, 0, 1);
 }
 
+Mat4x4 Mat4x4::operator*(const Mat4x4& rhs)
+{
+	Mat4x4 result = *this;
+	result *= rhs;
+	return result;
+}
+
+Vector4 Mat4x4::operator*(const Vector4& vec)
+{
+	Vector4 result;
+
+	for (size_t i = 0; i < 4; ++i)
+	{
+		result[i] = mRows[i].x * vec.x + mRows[i].y * vec.y + mRows[i].z * vec.z + mRows[i].w * vec.w;
+	}
+	return result;
+}
 } // namespace Core_Math

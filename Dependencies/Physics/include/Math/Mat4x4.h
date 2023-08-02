@@ -52,7 +52,13 @@ public:
 
 	Vector4& operator[](int i);
 
+	void operator*=(const Mat4x4& other);
 
+	void operator*=(numeral value);
+
+	Mat4x4 operator*(const Mat4x4& other);
+
+	Vector4 operator*(const Vector4& vec);
 private:
 	Vector4 mRows[4];
 };
@@ -71,5 +77,26 @@ inline Vector4& Mat4x4::operator[](int i)
 		assert(false);
 
 	return mRows[i];
+}
+
+inline void Mat4x4::operator*=(const Mat4x4& other)
+{	
+	for (size_t i = 0; i < 4; ++i)
+	{
+		mRows[i]  = Vector4(
+			mRows[i].x * other[0].x + mRows[i].y * other[1].x + mRows[i].z * other[2].x + mRows[i].w * other[3].x,
+			mRows[i].x * other[0].y + mRows[i].y * other[1].y + mRows[i].z * other[2].y + mRows[i].w * other[3].y,
+			mRows[i].x * other[0].z + mRows[i].y * other[1].z + mRows[i].z * other[2].z + mRows[i].w * other[3].z,
+			mRows[i].x * other[0].w + mRows[i].y * other[1].w + mRows[i].z * other[2].w + mRows[i].w * other[3].w
+		);
+	}
+}
+
+inline void Mat4x4::operator*=(numeral value)
+{
+	for (size_t i = 0; i < 4; ++i)
+	{
+		mRows[i] *= value;
+	}
 }
 }

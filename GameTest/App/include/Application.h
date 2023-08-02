@@ -2,10 +2,10 @@
 #include <memory>
 #include "Event/Dispatcher.h"
 #include "Renderer/Shader.h"
-#include "Renderer/IndexBuffer.h"
-#include "Renderer/VertexBuffer.h"
+#include "Renderer/Renderer.h"
 #include "Renderer/VertexArray.h"
 #include "Renderer/Texture.h"
+#include "Camera.h"
 #include <chrono>
 
 namespace Core
@@ -36,14 +36,14 @@ private:
 	std::shared_ptr<Scene> mScene;
 	
 	std::unique_ptr<Core_Renderer::Shader> mShader;
-
-	std::unique_ptr<Core_Renderer::IndexBuffer> mIbo;
-
-	std::unique_ptr<Core_Renderer::VertexBuffer> mVbo;
-
-	std::unique_ptr<Core_Renderer::VertexArray> mVao;
-
+	
 	std::unique_ptr<Core_Renderer::Texture> mTexture;
+
+	std::shared_ptr<Core_Renderer::VertexArray> mVao;
+
+	std::unique_ptr<Core_Renderer::Renderer> mRenderer;
+	
+	std::unique_ptr<Camera> mCamera;
 
 	std::unique_ptr<Dispatcher> mDispatcher;
 	

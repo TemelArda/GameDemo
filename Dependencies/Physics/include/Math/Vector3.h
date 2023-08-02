@@ -83,6 +83,8 @@ public:
 	friend Vector3 operator*(const Vector3& vector1, const Vector3& vector2);
 	friend Vector3 operator/(const Vector3& vector, numeral number);
 	friend Vector3 operator/(const Vector3& vector1, const Vector3& vector2);
+
+	static Vector3 Cross(const Vector3& vector1, const Vector3& vector2);
 };
 
 inline Vector3::Vector3()

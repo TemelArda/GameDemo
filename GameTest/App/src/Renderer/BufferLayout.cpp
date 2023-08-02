@@ -1,26 +1,67 @@
 #include "stdafx.h"
 #include "../../include/Renderer/BufferLayout.h"
-#include <GL/glew.h>
+
 
 namespace Core_Renderer
 {
-void BufferLayout::PushFloat(uint32_t count, bool normalized)
+
+BufferLayout::BufferLayout(const std::initializer_list<BufferElement>& elements)
+	: mElements(elements)
 {
-	mElements.push_back({count, GL_FLOAT, NORMILIZE_MODE[normalized]});
-	mStride += count * sizeof(float);
+	CalculateOffsetAndStride();
 }
 
-void BufferLayout::PushUInt(uint32_t count, bool normalized)
+void BufferLayout::CalculateOffsetAndStride()
 {
-	mElements.push_back({ count, GL_UNSIGNED_INT, NORMILIZE_MODE[normalized] });
-	mStride += count * sizeof(uint32_t);
+	uint32_t offset = 0;
+	mStride = 0;
+	for (auto& element : mElements)
+	{
+		element.Offset = offset;
+		offset += element.Size;
+		mStride += element.Size;
+	}
 }
 
-void BufferLayout::PushChar(uint32_t count, bool normalized)
+uint32_t BufferLayout::ShaderTypeToOpenGLType(const ShaderDataType& t)
 {
-	mElements.push_back({ count, GL_BYTE, NORMILIZE_MODE[normalized]});
-	mStride += count * sizeof(char);
+	switch (t)
+	{
+		case ShaderDataType::Float:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Float2:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Float3:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Float4:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Mat3:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Mat4:
+			return GL_FLOAT;
+			break;
+		case ShaderDataType::Int:
+			return GL_INT;
+			break;
+		case ShaderDataType::Int2:
+			return GL_INT;
+			break;
+		case ShaderDataType::Int3:
+			return GL_INT;
+			break;
+		case ShaderDataType::Int4:
+			return GL_INT;
+			break;
+		case ShaderDataType::Bool:
+			return GL_BOOL;
+			break;
+	}
+	return 0;
 }
-
 
 } // namespace Core_Renderer

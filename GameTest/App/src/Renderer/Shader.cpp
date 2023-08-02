@@ -16,7 +16,7 @@ Shader::Shader(const std::string& filename)
 {
 	mFilePath = PATH_TO_SHADERS + filename;
 	auto [vertexShader, fragmentShader] = ParseShader(mFilePath);
-	mRendererID = CreateShader(vertexShader, fragmentShader);
+	CreateShader(vertexShader, fragmentShader);
 }
 
 Shader::~Shader()
@@ -96,24 +96,24 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 	return {ss[0].str(), ss[1].str()};
 }
 
-ShaderID Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+void Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
 {
-	ShaderID programId = glCreateProgram();
+	mRendererID = glCreateProgram();
 	ShaderID vertexShaderId = CompileShader(vertexShader, GL_VERTEX_SHADER);
 	ShaderID fragmentShaderId = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
 
 	//Link the shaders to the program
-	glAttachShader(programId, vertexShaderId);
-	glAttachShader(programId, fragmentShaderId);
-	glLinkProgram(programId);
-	glValidateProgram(programId);
+	glAttachShader(mRendererID, vertexShaderId);
+	glAttachShader(mRendererID, fragmentShaderId);
+	glLinkProgram(mRendererID);
+	glValidateProgram(mRendererID);
 	
    //Delete the shaders
+	//glDetachShader(mRendererID, vertexShaderId);
+	//glDetachShader(mRendererID, fragmentShaderId);
 	glDeleteShader(vertexShaderId);
 	glDeleteShader(fragmentShaderId);
 
-
-	return programId;
 }
 
 uint32_t Shader::CompileShader(const std::string& source, uint32_t type)

@@ -5,11 +5,11 @@ namespace Core_Math
 {
 #if defined(DOUBLE_PRECISION)   
 using numeral = double;
+constexpr numeral MAX_NUMERAL{ DBL_MAX };
+constexpr numeral EPSILON{ DBL_EPSILON };
 #else                                   
 using numeral = float;
+constexpr numeral MAX_NUMERAL {FLT_MAX};
+constexpr numeral EPSILON {FLT_EPSILON};
 #endif
-
-const numeral MAX_NUMERAL = std::numeric_limits<numeral>::max();
-const numeral EPSILON = std::numeric_limits<numeral>::epsilon();
-
 } // namespace Core_Math

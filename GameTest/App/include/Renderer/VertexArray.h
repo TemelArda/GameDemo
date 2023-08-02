@@ -1,6 +1,7 @@
 #pragma once
 #include "VertexBuffer.h"
-#include "BufferLayout.h"
+#include "IndexBuffer.h"
+#include <memory>
 
 namespace Core_Renderer
 {
@@ -12,7 +13,13 @@ public:
 	
 	~VertexArray();
 
-	void AddVertexBuffer(const VertexBuffer& vb, const BufferLayout& layout ) const;
+	void AddVertexBuffer(const std::shared_ptr<VertexBuffer>& vb);
+
+	std::vector<std::shared_ptr<VertexBuffer>> inline GetVertexBuffers() const { return mVertexBuffers; }
+
+	void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& ib);
+
+	std::shared_ptr<IndexBuffer> inline GetIndexBuffer() const { return mIndexBuffer; }
 
 	void Bind() const;
 	
@@ -20,5 +27,9 @@ public:
 
 private:
 	VertexBufferID mRendererID;
+
+	std::vector<std::shared_ptr<VertexBuffer>> mVertexBuffers;
+
+	std::shared_ptr<IndexBuffer> mIndexBuffer;
 };
 } // namespace Core_Renderer

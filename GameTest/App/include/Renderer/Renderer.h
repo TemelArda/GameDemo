@@ -1,25 +1,25 @@
 #pragma once
 #include "VertexArray.h"
-#include "IndexBuffer.h"
-#include "Shader.h"
+#include <memory>
 
 namespace Core_Renderer
 {
 class Renderer
 {
 public:
-	static Renderer& GetInstance()
-	{
-		static Renderer instance;
-		return instance;
-	}
 
-	static void Render(const VertexArray* vao, const IndexBuffer* Ibo, const Shader* shader);
-
-	static void PrintOpenGLVersion();
-private:
 	Renderer() = default;
+
 	~Renderer() = default;
+
+	void BeginScene();
+
+	void Submit(const std::shared_ptr<VertexArray>& vao);
+
+	void EndScene();
+
+	static void PrintRenderAPI();
+private:
 
 };
 }

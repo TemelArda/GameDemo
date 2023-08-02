@@ -88,4 +88,10 @@ Vector3 operator/(const Vector3& vector1, const Vector3& vector2)
 	return Vector3(vector1.x / vector2.x, vector1.y / vector2.y, vector1.z / vector2.z);
 }
 
+Vector3 Vector3::Cross(const Vector3& vector1, const Vector3& vector2)
+{
+	return Vector3(vector1.y * vector2.z - vector1.z * vector2.y,
+		vector1.z * vector2.x - vector1.x * vector2.z,
+		vector1.x * vector2.y - vector1.y * vector2.x);
+}
 } // namespace Core_Math
