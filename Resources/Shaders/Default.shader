@@ -26,7 +26,7 @@ void main()
 {
     vec4 texColor = texture(u_Texture, v_TexCoord);
 
-    vec3 cirColor = 0.5 + 0.5 * cos(u_Time + vec3(0,2,4));
+    vec3 cirColor = 0.5 + 0.5 * cos(u_Time + vec3(0,1,0)) * sin(u_Time + vec3(2,0,4));
     float thickness = 1.0;
     // Control with mouse
     // thickness = iMouse.x / iResolution.x;

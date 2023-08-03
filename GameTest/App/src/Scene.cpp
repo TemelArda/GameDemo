@@ -66,8 +66,8 @@ void Scene::InitilizeEntities()
 	Transform2DComponent playerTransform(APP_INIT_WINDOW_WIDTH / 2, APP_INIT_WINDOW_HEIGHT / 2, .25, 0);
 
 	CircleRendererComponent cir;
-	cir.color = {.2, .2, .7};
-	cir.radius = .5;
+	cir.color = {.2f, .2f, .7f};
+	cir.radius = .5f;
 	cir.isFilled = TRUE;
 
 

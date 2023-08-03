@@ -1,6 +1,7 @@
 #pragma once
 #include "VertexArray.h"
 #include <memory>
+#include  "../Camera.h"
 
 namespace Core_Renderer
 {
@@ -12,7 +13,7 @@ public:
 
 	~Renderer() = default;
 
-	void BeginScene();
+	void BeginScene(const std::shared_ptr<Core::Camera>& camera) const;
 
 	void Submit(const std::shared_ptr<VertexArray>& vao);
 

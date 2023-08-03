@@ -125,7 +125,7 @@ Mat4x4 Mat4x4::Transpose(const Mat4x4& matrix)
 		);
 }
 
-Mat4x4 Mat4x4::GetIdentity()
+Mat4x4 Mat4x4::Identity()
 {
 	
 	return Mat4x4(
@@ -151,5 +151,11 @@ Vector4 Mat4x4::operator*(const Vector4& vec)
 		result[i] = mRows[i].x * vec.x + mRows[i].y * vec.y + mRows[i].z * vec.z + mRows[i].w * vec.w;
 	}
 	return result;
+}
+Mat4x4 Mat4x4::operator*(numeral value)
+{
+	Mat4x4 result = *this;
+	result *= value;
+	return Mat4x4();
 }
 } // namespace Core_Math

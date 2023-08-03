@@ -46,7 +46,7 @@ public:
 
 	static Mat4x4 Transpose(const Mat4x4& matrix);
 
-	static Mat4x4 GetIdentity();
+	static Mat4x4 Identity();
 
 	const Vector4& operator[](int i) const;
 
@@ -59,6 +59,8 @@ public:
 	Mat4x4 operator*(const Mat4x4& other);
 
 	Vector4 operator*(const Vector4& vec);
+
+	Mat4x4 operator*(numeral value);
 private:
 	Vector4 mRows[4];
 };

@@ -43,7 +43,7 @@ private:
 
 	std::unique_ptr<Core_Renderer::Renderer> mRenderer;
 	
-	std::unique_ptr<Camera> mCamera;
+	std::shared_ptr<Camera> mCamera;
 
 	std::unique_ptr<Dispatcher> mDispatcher;
 	

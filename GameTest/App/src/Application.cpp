@@ -18,7 +18,7 @@ void Application::Initilize()
 	if (!mRenderer)
 		mRenderer = std::make_unique<Core_Renderer::Renderer>();
 	if(!mCamera)
-		mCamera = std::make_unique<Camera>();
+		mCamera = std::make_shared<Camera>();
 
 	mRenderer->PrintRenderAPI();
 	
@@ -34,7 +34,7 @@ void Application::Update(float ts)
 }
 void Application::Render()
 {
-	mRenderer->BeginScene();
+	mRenderer->BeginScene(mCamera);
 
 	auto current = std::chrono::high_resolution_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current - mStartTime);
@@ -104,9 +104,8 @@ void Application::testFunction(IEvent& e)
 	mTexture->Bind();
 	mShader->SetUniform1i("u_Texture", 0);
 
-	Core_Math::Mat4x4 ortho = mCamera->GetProjectionMatrix();
-	ortho *= mCamera->GetViewMatrix();
-	mShader->SetUniformMat4f("u_MVP", ortho);
+	Core_Math::Mat4x4 vp = mCamera->GetViewProjection();
+	mShader->SetUniformMat4f("u_MVP", vp);
 	
 	// unbind everything
 	mShader->Unbind();

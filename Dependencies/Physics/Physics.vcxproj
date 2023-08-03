@@ -134,14 +134,19 @@
     <ClInclude Include="include\Math\Mat4x4.h" />
     <ClInclude Include="include\Math\MathCommon.h" />
     <ClInclude Include="include\Math\MathUtils.h" />
+    <ClInclude Include="include\Math\Quaternion.h" />
+    <ClInclude Include="include\Math\Transform2D.h" />
     <ClInclude Include="include\Math\Vector2.h" />
     <ClInclude Include="include\Math\Vector3.h" />
     <ClInclude Include="include\Math\Vector4.h" />
+    <ClInclude Include="include\Math\Transform3D.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="include\Physics.h" />
     <ClCompile Include="src\Math\Mat4x4.cpp" />
+    <ClCompile Include="src\Math\Transform3D.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Math\Vector4.cpp" />

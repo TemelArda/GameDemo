@@ -2,17 +2,19 @@
 #include "../../include/Renderer/Renderer.h"
 #include "Logger.h"
 #include "../../include/Renderer/RenderCommand.h"
+#include "../../include/Camera.h"
 
 namespace Core_Renderer
 {
-void Renderer::BeginScene()
+void Renderer::BeginScene(const std::shared_ptr<Core::Camera>& camera) const
 {
+	RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
+	RenderCommand::Clear();
 }
 
 void Renderer::Submit(const std::shared_ptr<VertexArray>& vao)
 {
-	RenderCommand::SetClearColor({ 0.05f, 0.05f,  0.05f, 1.0f });
-	RenderCommand::Clear();
+	
 	const auto& ib = vao->GetIndexBuffer();
 	vao->Bind();
 	ib->Bind();

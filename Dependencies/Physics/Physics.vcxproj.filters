@@ -33,6 +33,15 @@
     <ClInclude Include="include\Math\MathUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Math\Transform3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Quaternion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Math\Transform2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Math\Vector3.cpp">
@@ -51,6 +60,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\MathUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Quaternion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Transform3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

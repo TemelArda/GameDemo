@@ -4,7 +4,7 @@ namespace Core_Math
 {
 Mat4x4 Ortho(const float left, const float right, const float bottom, const float top, const float near, const float far)
 {
-	Mat4x4 result = Mat4x4::GetIdentity();
+	Mat4x4 result = Mat4x4::Identity();
 
 	result[0][0] = 2.0f / (right - left);
 	result[1][1] = 2.0f / (top - bottom);
