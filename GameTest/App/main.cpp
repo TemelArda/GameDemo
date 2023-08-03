@@ -91,7 +91,7 @@ bool		gRenderUpdateTimes = APP_RENDER_UPDATE_TIMES;
 /* Initialize OpenGL Graphics */
 void InitGL()
 {
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	StartCounter();
 	gLastTime = GetCounter();
 	// Set "clearing" or background color
@@ -104,14 +104,14 @@ void InitGL()
 //---------------------------------------------------------------------------------
 void Display()
 {
-	glClear(GL_COLOR_BUFFER_BIT);   // Clear the color buffer with current clearing color
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);   // Clear the color buffer with current clearing color
 
 	gUserRenderProfiler.Start();	
 	Render();						// Call user defined render.
 	gUserRenderProfiler.Stop();
 	if (gRenderUpdateTimes)
 	{
-		gUpdateDeltaTime.Print	 (10, 40, "Update");
+		gUpdateDeltaTime.Print	 (10, 40, "Update");	
 		gUserRenderProfiler.Print(10, 25, "User Render");
 		gUserUpdateProfiler.Print(10, 10, "User Update");
 	}

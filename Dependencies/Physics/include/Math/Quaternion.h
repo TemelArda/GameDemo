@@ -33,11 +33,11 @@ public:
 
 	void Set(const Vector4& values);
 
-	const std::tuple<numeral, const Vector3&> toAxisAngle() const;
+	const std::tuple<numeral, const Vector3> toAxisAngle() const;
 
-	const Vector3& toEuler() const;
+	const Vector3 toEuler() const;
 
-	const Mat4x4& toMatrix() const;
+	const Mat4x4 toMatrix() const;
 
 	const numeral Magnitude() const;
 
@@ -85,18 +85,18 @@ public:
 	static Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, numeral t);
 };
 
-Quaternion::Quaternion()
+inline Quaternion::Quaternion()
 	: x(0.0f), y(0.0f), z(0.0f), w(1.0f)
 {
 }
 
-Quaternion::Quaternion(numeral x, numeral y, numeral z, numeral w)
+inline Quaternion::Quaternion(numeral x, numeral y, numeral z, numeral w)
 	: x(x), y(y), z(z), w(w)
 {
 	
 }
 
-Quaternion::Quaternion(const Vector4& values)
+inline Quaternion::Quaternion(const Vector4& values)
 	: x(values.x), y(values.y), z(values.z), w(values.w)
 {
 }
@@ -117,7 +117,7 @@ void inline Quaternion::Set(const Vector4& values)
 	w = values.w;
 }
 
-const numeral Core_Math::Quaternion::Magnitude() const
+inline const numeral Core_Math::Quaternion::Magnitude() const
 {
 	return sqrt(x * x + y * y + z * z + w * w);
 }
@@ -136,7 +136,11 @@ inline Quaternion Quaternion::GetNormilized() const
 
 inline Quaternion Quaternion::GetInverse() const
 {
-	return Quaternion(-x, -y, -z, w);
+	numeral sm = MagnitudehSquare();
+
+	assert(sm > EPSILON);
+
+	return Quaternion(-x/sm, -y/sm, -z/sm, w/sm);
 }
 
 inline Quaternion Quaternion::GetConjugate() const
@@ -157,9 +161,14 @@ inline void Quaternion::normalize() {
 }
 inline void Quaternion::invert()
 {
-	x = -x;
-	y = -y;
-	z = -z;
+	numeral sm = MagnitudehSquare();
+
+	assert(sm > EPSILON);
+
+	x = -x / sm;
+	y = -y / sm;
+	z = -z / sm;
+	w = w / sm;
 }
 
 inline void Quaternion::operator*=(const Quaternion& other)
@@ -203,10 +212,11 @@ inline Quaternion Quaternion::operator*(numeral other) const
 	return Quaternion(x * other, y * other, z * other, w * other);
 }
 
-bool Quaternion::operator==(const Quaternion& quaternion) const {
+inline bool Quaternion::operator==(const Quaternion& quaternion) const {
 	return (x == quaternion.x && y == quaternion.y &&
 		z == quaternion.z && w == quaternion.w);
 }
+
 inline Quaternion Quaternion::dot(const Quaternion& q1, const Quaternion& q2)
 {
 	return Quaternion(q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w);

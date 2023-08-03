@@ -24,6 +24,8 @@ void Application::Initilize()
 	
 	mScene->Initilize();
 
+	mCamera->SetPosition({ -1.0f, 0.0f, 0.2f });
+
 	mDispatcher->Subscribe(std::bind(&Application::testFunction, this, std::placeholders::_1));
 	mDispatcher->Dispatch(DemoEvent(10));
 	mDispatcher->UnSubscribe(BIND_LISTENER_FUNCTION(Application::testFunction));
@@ -34,18 +36,17 @@ void Application::Update(float ts)
 }
 void Application::Render()
 {
-	mRenderer->BeginScene(mCamera);
-
 	auto current = std::chrono::high_resolution_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current - mStartTime);
-	mTexture->Bind();
-	mShader->Bind();
-	mShader->SetUniform1f("u_Time", (float)elapsed.count() / 1000.0);
-	mRenderer->Submit(mVao);
-	mShader->Unbind();
-	mScene->Render();
+	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current - mStartTime);
+	float sin = std::sin(elapsed.count());
 
+	mRenderer->BeginScene(*mCamera);
+	mTexture->Bind();
+	mRenderer->Submit(mShader, mVao);
+	
 	mRenderer->EndScene();
+
+	mScene->Render();
 }
 
 void Application::Shutdown()
@@ -94,7 +95,7 @@ void Application::testFunction(IEvent& e)
 	mVao->SetIndexBuffer(mIbo);
 
 	// create shader
-	mShader = std::make_unique<Core_Renderer::Shader>("Default.shader");
+	mShader = std::make_shared<Core_Renderer::Shader>("Default.shader");
 	mShader->Bind();
 	mShader->SetUniform1f("u_Time", 0.0f);
 	mStartTime = std::chrono::high_resolution_clock::now();
@@ -104,9 +105,6 @@ void Application::testFunction(IEvent& e)
 	mTexture->Bind();
 	mShader->SetUniform1i("u_Texture", 0);
 
-	Core_Math::Mat4x4 vp = mCamera->GetViewProjection();
-	mShader->SetUniformMat4f("u_MVP", vp);
-	
 	// unbind everything
 	mShader->Unbind();
 	mVbo->Unbind();

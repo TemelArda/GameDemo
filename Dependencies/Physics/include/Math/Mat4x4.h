@@ -85,12 +85,12 @@ inline void Mat4x4::operator*=(const Mat4x4& other)
 {	
 	for (size_t i = 0; i < 4; ++i)
 	{
-		mRows[i]  = Vector4(
-			mRows[i].x * other[0].x + mRows[i].y * other[1].x + mRows[i].z * other[2].x + mRows[i].w * other[3].x,
-			mRows[i].x * other[0].y + mRows[i].y * other[1].y + mRows[i].z * other[2].y + mRows[i].w * other[3].y,
-			mRows[i].x * other[0].z + mRows[i].y * other[1].z + mRows[i].z * other[2].z + mRows[i].w * other[3].z,
-			mRows[i].x * other[0].w + mRows[i].y * other[1].w + mRows[i].z * other[2].w + mRows[i].w * other[3].w
-		);
+		 
+		numeral x = mRows[i].x * other[0].x + mRows[i].y * other[1].x + mRows[i].z * other[2].x + mRows[i].w * other[3].x;
+		numeral y = mRows[i].x * other[0].y + mRows[i].y * other[1].y + mRows[i].z * other[2].y + mRows[i].w * other[3].y;
+		numeral z = mRows[i].x * other[0].z + mRows[i].y * other[1].z + mRows[i].z * other[2].z + mRows[i].w * other[3].z;
+		numeral w = mRows[i].x * other[0].w + mRows[i].y * other[1].w + mRows[i].z * other[2].w + mRows[i].w * other[3].w;
+		mRows[i] = {x, y, z, w};
 	}
 }
 

@@ -6,31 +6,23 @@ namespace Core
 {
 Camera::Camera()
 {
-	SetProjectionMatrix(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0);
-	mPosition = {0, 0, -10};
-	mDirection = {0, 0, -1};
-	Core_Math::Vector3 target = mPosition + mDirection;
-	target.Normalize();
-	SetViewMatrix(mPosition, target, {0, 1, 0});
+	SetProjectionMatrix(-2.0f, 2.0f, -1.5f, 1.5f, 0.1f, 100.0);
+	mTransform.mPosition = { 0, 0, -10 };
+	SetViewMatrix();
 }
 
 Camera::Camera(Core_Math::Vector3 pos, Core_Math::Vector3 dir)
-	: mPosition(pos), mDirection(dir)
 {
-	SetProjectionMatrix(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0);
-	Core_Math::Vector3 target = mPosition + mDirection;
-	target.Normalize();
-	SetViewMatrix(mPosition, target, { 0, 1, 0 });
+	mTransform.mPosition = pos;
+	SetProjectionMatrix(-2.0f, 2.0f, -1.5f, 1.5f, 0.1f, 100.0);
+	SetViewMatrix();
 }
 
 Camera::Camera(const float left, const float right, const float bottom, const float top, const float near, const float far)
 {
 	SetProjectionMatrix(left, right, bottom, top, near, far);
-	mPosition = { 0, 0, -10 };
-	mDirection = { 0, 0, -1 };
-	Core_Math::Vector3 target = mPosition + mDirection;
-	target.Normalize();
-	SetViewMatrix(mPosition, target, { 0, 1, 0 });
+	mTransform.mPosition = { 0, 0, -10 };
+	SetViewMatrix();
 }
 
 void Camera::SetProjectionMatrix(const float left, const float right, const float bottom, const float top, const float near, const float far)
@@ -39,25 +31,22 @@ void Camera::SetProjectionMatrix(const float left, const float right, const floa
 	mViewxProjection = mProjectionMatrix * mViewMatrix;
 }
 
-void Camera::SetViewMatrix(const Core_Math::Vector3& Peye, const Core_Math::Vector3& Pref, const Core_Math::Vector3& up)
+void Camera::SetViewMatrix()
 {
-	mViewMatrix = Core_Math::lookAt(Peye, Pref, up);
+	mViewMatrix = mTransform.GetInverseModelMatrix();
 	mViewxProjection = mProjectionMatrix * mViewMatrix;
 }
 
 void Camera::SetPosition(const Core_Math::Vector3& position)
 {
-	mPosition = position;
-	Core_Math::Vector3 target = mPosition + mDirection;
-	target.Normalize();
-	SetViewMatrix(mPosition, target, { 0, 1, 0 });
+	mTransform.mPosition = position;
+	SetViewMatrix();
 }
 
-void Camera::SetForwardDirection(const Core_Math::Vector3& direction)
+void Camera::SetRotation(const Core_Math::Vector3& euler)
 {
-	mDirection = direction;
-	Core_Math::Vector3 target = mPosition + mDirection;
-	target.Normalize();
-	SetViewMatrix(mPosition, target, {0, 1, 0});
+	mTransform.mRotation = Core_Math::Quaternion::Identity();
+	mTransform.Rotate(euler);
+	SetViewMatrix();
 }
 }

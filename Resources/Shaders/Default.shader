@@ -10,7 +10,7 @@ uniform mat4 u_MVP;
 
 void main()
 {
-    gl_Position = u_MVP * postion ;
+    gl_Position =  u_MVP * postion ;
     v_TexCoord = texCoord;
 };
 
@@ -36,5 +36,5 @@ void main()
     vec3 cir = vec3(smoothstep(0.0, fade, distance));
     cir *= vec3(smoothstep(thickness + fade, thickness, distance));
 
-    color =  texColor + vec4(cir * cirColor, 1.0);
+    color =  texColor;
 };

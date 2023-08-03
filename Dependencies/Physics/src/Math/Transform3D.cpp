@@ -4,38 +4,37 @@
 namespace Core_Math
 {
 
-inline const Mat4x4& Transform3D::GetModelMatrix() const
+const Mat4x4 Transform3D::GetModelMatrix() const
 {
-	Mat4x4 rotationMatrix = mRotation.toMatrix();
+	
+	Mat4x4 mm = Mat4x4::Identity();
 
-	Mat4x4 scaleMatrix = Mat4x4::Identity();
-	scaleMatrix[0][0] = mScale.x;
-	scaleMatrix[1][1] = mScale.y;
-	scaleMatrix[2][2] = mScale.z;
+	mm[0][3] = mPosition.x;
+	mm[1][3] = mPosition.y;
+	mm[2][3] = mPosition.z;
 
-	Mat4x4 translationMatrix = Mat4x4::Identity();
-	translationMatrix[0][3] = mPosition.x;
-	translationMatrix[1][3] = mPosition.y;
-	translationMatrix[2][3] = mPosition.z;
+	Mat4x4 rm = mRotation.toMatrix();
+	for (size_t i = 0; i < 3; i++)
+	{
+		for (size_t j = 0; j < 3; j++)
+		{
+			mm[i][j] = rm[i][j];
+		}
+	}
 
-	return translationMatrix * rotationMatrix * scaleMatrix;
+	return mm;
 }
 
-inline const Mat4x4& Transform3D::GetInverseModelMatrix() const
+const Mat4x4 Transform3D::GetInverseModelMatrix() const
 {
-	Mat4x4 rotationMatrix = mRotation.GetInverse().toMatrix();
-
-	Mat4x4 scaleMatrix = Mat4x4::Identity();
-	scaleMatrix[0][0] = 1.0f / mScale.x;
-	scaleMatrix[1][1] = 1.0f / mScale.y;
-	scaleMatrix[2][2] = 1.0f / mScale.z;
-
-	Mat4x4 translationMatrix = Mat4x4::Identity();
-	translationMatrix[0][3] = -mPosition.x;
-	translationMatrix[1][3] = -mPosition.y;
-	translationMatrix[2][3] = -mPosition.z;
-
-	return scaleMatrix * rotationMatrix * translationMatrix;
+	
+	Mat4x4 modelMatrixTransposed = Mat4x4::Transpose(GetModelMatrix());
+	modelMatrixTransposed.SetRow(3, {0, 0, 0, 1});
+	for(int i = 0; i < 3; ++i )
+	{
+		modelMatrixTransposed[i][3] = -(modelMatrixTransposed[i][0] * mPosition.x + modelMatrixTransposed[i][1] * mPosition.y + modelMatrixTransposed[i][2] * mPosition.z);
+	}
+	return modelMatrixTransposed;
 }
 
 void Transform3D::Translate(const Vector3& translation)
@@ -70,7 +69,6 @@ void Transform3D::LookAt(const Vector3& target, const Vector3& up)
 	mPosition = m[0].w;
 	mPosition = m[1].w;
 	mPosition = m[2].w;
-
 }
 
 

@@ -2,7 +2,7 @@
 
 namespace Core_Math
 {
-const std::tuple<numeral, const Vector3&> Quaternion::toAxisAngle() const
+const std::tuple<numeral, const Vector3> Quaternion::toAxisAngle() const
 {
 	const auto& normalized = this->GetNormilized();
 	numeral angle = 2.0f * acos(normalized.w);
@@ -23,7 +23,7 @@ const std::tuple<numeral, const Vector3&> Quaternion::toAxisAngle() const
 	}
 }
 
-const Vector3& Quaternion::toEuler() const
+const Vector3 Quaternion::toEuler() const
 {
 	Vector3 angles;
 	const auto& q = this->GetNormilized();
@@ -51,23 +51,23 @@ const Vector3& Quaternion::toEuler() const
 	return angles;
 }
 
-const Mat4x4& Quaternion::toMatrix() const
+const Mat4x4 Quaternion::toMatrix() const
 {
 	const auto& q = this->GetNormilized();
 	//First row of the rotation matatrix
-	numeral r00 = 2 * (q.x * q.x + q.y * q.y) - 1;
-	numeral r01 = 2 * (q.y * q.z - q.x * q.w);
-	numeral r02 = 2 * (q.y * q.w + q.x * q.z);
+	numeral r00 = 1 - 2 * (q.y * q.y + q.z * q.z);
+	numeral r01 = 2 * (q.x * q.y - q.z * q.w);
+	numeral r02 = 2 * (q.x * q.z + q.y * q.w);
 
 	//Second row of the rotation matatrix
-	numeral r10 = 2 * (q.y * q.z + q.x * q.w);
-	numeral r11 = 2 * (q.x * q.x + q.z * q.z) - 1;
-	numeral r12 = 2 * (q.z * q.w - q.x * q.y);
+	numeral r10 = 2 * (q.x * q.y + q.z * q.w);
+	numeral r11 = 1 - 2 * (q.x * q.x + q.z * q.z);
+	numeral r12 = 2 * (q.y * q.z - q.x * q.w);
 	
 	//Third row of the rotation matatrix
-	numeral r20 = 2 * (q.y * q.w - q.x * q.z);
-	numeral r21 = 2 * (q.z * q.w + q.x * q.y);
-	numeral r22 = 2 * (q.x * q.x + q.w * q.w) - 1;
+	numeral r20 = 2 * (q.x * q.z - q.y * q.w);
+	numeral r21 = 2 * (q.y * q.z + q.x * q.w);
+	numeral r22 = 1 - 2 * (q.x * q.x + q.y * q.y);
 	//3x3 rotation matatrix
 	return Mat4x4(
 		{r00, r01, r02, 0},

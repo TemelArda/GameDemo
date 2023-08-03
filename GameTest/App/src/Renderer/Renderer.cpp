@@ -3,22 +3,28 @@
 #include "Logger.h"
 #include "../../include/Renderer/RenderCommand.h"
 #include "../../include/Camera.h"
+#include "Math/Mat4x4.h"
+
 
 namespace Core_Renderer
 {
-void Renderer::BeginScene(const std::shared_ptr<Core::Camera>& camera) const
+ 
+Renderer::SceneData* Renderer::mSceneData = new Renderer::SceneData;
+
+void Renderer::BeginScene(const Core::Camera& camera) const
 {
-	RenderCommand::SetClearColor({0.1f, 0.1f, 0.1f, 1.0f});
-	RenderCommand::Clear();
+	mSceneData->ViewProjectionMatrix = camera.GetViewProjection();
 }
 
-void Renderer::Submit(const std::shared_ptr<VertexArray>& vao)
+void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vao)
 {
-	
 	const auto& ib = vao->GetIndexBuffer();
 	vao->Bind();
 	ib->Bind();
+	shader->Bind();
+	shader->SetUniformMat4f("u_MVP", mSceneData->ViewProjectionMatrix);
 	RenderCommand::DrawIndexed(vao);
+	shader->Unbind();
 }
 void Renderer::EndScene()
 {

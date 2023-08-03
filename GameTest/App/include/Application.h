@@ -35,7 +35,7 @@ public:
 private:
 	std::shared_ptr<Scene> mScene;
 	
-	std::unique_ptr<Core_Renderer::Shader> mShader;
+	std::shared_ptr<Core_Renderer::Shader> mShader;
 	
 	std::unique_ptr<Core_Renderer::Texture> mTexture;
 
