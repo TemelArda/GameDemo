@@ -29,4 +29,14 @@ void OpenGLRendererAPI::PrintRenderAPI()
 	LOG_INFO("	Renderer: {}", (char*)glGetString(GL_RENDERER));
 }
 
+void OpenGLRendererAPI::EnableDepthTest()
+{
+	glEnable(GL_DEPTH_TEST);
+}
+
+void OpenGLRendererAPI::DisableDepthTest()
+{
+	glDisable(GL_DEPTH_TEST);
+}
+
 }

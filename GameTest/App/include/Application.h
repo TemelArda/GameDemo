@@ -7,6 +7,7 @@
 #include "Renderer/Texture.h"
 #include "Camera.h"
 #include <chrono>
+#include "Mesh.h"
 
 namespace Core
 {
@@ -35,9 +36,6 @@ public:
 private:
 	std::shared_ptr<Scene> mScene;
 	
-	std::shared_ptr<Core_Renderer::Shader> mShader;
-	
-	std::unique_ptr<Core_Renderer::Texture> mTexture;
 
 	std::shared_ptr<Core_Renderer::VertexArray> mVao;
 
@@ -46,7 +44,8 @@ private:
 	std::shared_ptr<Camera> mCamera;
 
 	std::unique_ptr<Dispatcher> mDispatcher;
-	
+
+	std::vector<std::shared_ptr<Mesh>> mMeshes;
 	
 	Application() = default;
 	

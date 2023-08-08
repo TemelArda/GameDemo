@@ -5,7 +5,7 @@
 
 namespace Core_Renderer
 {
-using VertexBufferID = uint32_t;
+using VertexArrayID = uint32_t;
 class VertexArray
 {
 public:
@@ -24,9 +24,11 @@ public:
 	void Bind() const;
 	
 	void Unbind() const;
+	 
+	const VertexArrayID GetID() const { return mRendererID; }
 
 private:
-	VertexBufferID mRendererID;
+	VertexArrayID mRendererID;
 
 	std::vector<std::shared_ptr<VertexBuffer>> mVertexBuffers;
 

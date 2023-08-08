@@ -9,6 +9,8 @@ class Texture
 public:
 	Texture(const std::string& path);
 
+	Texture();
+
 	~Texture();
 
 	void Bind(uint32_t slot = 0) const;
@@ -26,8 +28,6 @@ private:
 	uint32_t mRendererID;
 	
 	std::string mFilePath;
-	
-	unsigned char* mData;
 
 	uint32_t mWidth, mHeight, mBitPPixel;
 };

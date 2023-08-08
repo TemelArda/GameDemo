@@ -5,6 +5,8 @@
 #include "../include/Renderer/BufferLayout.h"
 #include "../include/Renderer/Renderer.h"
 #include "../include/Settings.h"
+#include "../include/CoreDefines.h"
+#include "../include/ResourceManager.h"
 #include <chrono>
 
 namespace Core
@@ -24,8 +26,6 @@ void Application::Initilize()
 	
 	mScene->Initilize();
 
-	mCamera->SetPosition({ -1.0f, 0.0f, 0.2f });
-
 	mDispatcher->Subscribe(std::bind(&Application::testFunction, this, std::placeholders::_1));
 	mDispatcher->Dispatch(DemoEvent(10));
 	mDispatcher->UnSubscribe(BIND_LISTENER_FUNCTION(Application::testFunction));
@@ -36,17 +36,24 @@ void Application::Update(float ts)
 }
 void Application::Render()
 {
+	Core_Math::Transform3D transform;
 	auto current = std::chrono::high_resolution_clock::now();
-	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current - mStartTime);
-	float sin = std::sin(elapsed.count());
-
-	mRenderer->BeginScene(*mCamera);
-	mTexture->Bind();
-	mRenderer->Submit(mShader, mVao);
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current - mStartTime);
+	float sin = (std::sin(elapsed.count() * 0.0005f) + 1) * .5f;
+	float cos = std::cos(elapsed.count() * 0.005f);
+	float sin2 = std::sin(elapsed.count() * 0.0005f) * 2;
+	mRenderer->BeginScene(*mCamera, (float) elapsed.count());	
+	//transform.Rotate({ 0.0f, sin * 2 * PI, sin * 2 * PI });
+	for (size_t i = 0; i < mMeshes.size(); ++i)
+	{
+		float x =  (float)i - (mMeshes.size() * 0.5f );
+		transform.mPosition = { -x , 0.0f, 0.0f };
+		mRenderer->Submit(mMeshes[i], transform.GetModelMatrix());
+	}
 	
 	mRenderer->EndScene();
 
-	mScene->Render();
+	//mScene->Render();
 }
 
 void Application::Shutdown()
@@ -63,53 +70,28 @@ void Application::testFunction(IEvent& e)
 	}
 	DemoEvent de = static_cast<DemoEvent&>(e);
 	LOG_INFO("testFunction called with: {}" , de.GetVariable());
-	
-	//Generate vertex array object
+	// create Meshes
+	const auto& meshCube = std::make_shared<Mesh>();
+	const auto& texture = ResourceManager::LoadTexture("blue_eyes.bmp", "BlueEyes");
+	const auto& material = std::make_shared<DefaultMaterial>();
+	material->Texture = texture;
+	meshCube->SetMaterial(material);
+	ResourceManager::LoadMaterial(material, "BlueEyes");
 
-	// Vertex buffer data 3d position and UV
-	float vertexData[] = {
-		-0.5f, -0.5f, 0.0f, 0.0, 0.0,// bot-left  
-		 0.5f, -0.5f, 0.0f, 1.0, 0.0,// bot-right 
-		 0.5f,  0.5f, 0.0f,  1.0, 1.0,// top-right   
-		 -0.5f, 0.5f, 0.0f, 0.0, 1.0,// top-left 
-	};
+	const auto& meshQuad = std::make_shared<Mesh>();
+	const auto& materialRed = std::make_shared<DefaultMaterial>();
+	materialRed->Texture = texture;
+	materialRed->DiffuseColor = { .85f, .1f, .05f, 1.0f };
+	meshQuad->SetMaterial(materialRed);
+	meshQuad->SetVertexArray(ResourceManager::GetInstance().GetQuadVertexArray());
+	ResourceManager::LoadMaterial(materialRed, "RedEyes");
 
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
 
-	mVao = std::make_shared<Core_Renderer::VertexArray>();
-	auto mIbo = std::make_shared<Core_Renderer::IndexBuffer>(indices, 6);
-	auto mVbo = std::make_shared<Core_Renderer::VertexBuffer>(vertexData, 5 * 4 * sizeof(float), 4);
-	
-	{
-		Core_Renderer::BufferLayout layout = {
-			{Core_Renderer::ShaderDataType::Float3, "a_Position"},
-			{Core_Renderer::ShaderDataType::Float2, "a_TexCoord" }
-		};
-		mVbo->SetLayout(layout);
-	}
+	mMeshes.push_back(std::make_shared <Mesh>());
+	mMeshes.push_back(meshCube);
+	mMeshes.push_back(meshQuad);
 
-	mVao->AddVertexBuffer(mVbo);
-	mVao->SetIndexBuffer(mIbo);
-
-	// create shader
-	mShader = std::make_shared<Core_Renderer::Shader>("Default.shader");
-	mShader->Bind();
-	mShader->SetUniform1f("u_Time", 0.0f);
 	mStartTime = std::chrono::high_resolution_clock::now();
-	
-	// create texture
-	mTexture = std::make_unique<Core_Renderer::Texture>("blue_eyes.bmp");
-	mTexture->Bind();
-	mShader->SetUniform1i("u_Texture", 0);
-
-	// unbind everything
-	mShader->Unbind();
-	mVbo->Unbind();
-	mIbo->Unbind();
-	mVao->Unbind();
 }
 
 } // namespace Core

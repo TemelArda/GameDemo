@@ -32,6 +32,16 @@ public:
 		mAPI->PrintRenderAPI();
 	}
 
+	static inline void EnableDepthTest()
+	{
+		mAPI->EnableDepthTest();
+	}
+
+	static inline void DisableDepthTest()
+	{
+		mAPI->DisableDepthTest();
+	}
+
 private:
 	static IRendererAPI* mAPI;
 };

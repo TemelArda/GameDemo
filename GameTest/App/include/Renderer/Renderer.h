@@ -1,11 +1,13 @@
 #pragma once
 #include "VertexArray.h"
-#include  "../Camera.h"
 #include "Shader.h"
+#include "Math/Mat4x4.h"
+#include "Math/Vector3.h"
+#include "../Mesh.h"
 
-namespace Core_Math
+namespace Core
 {
-	class Mat4x4;
+	class Camera;
 }
 
 namespace Core_Renderer
@@ -19,9 +21,9 @@ public:
 
 	~Renderer() = default;
 
-	void BeginScene(const Core::Camera& camera) const;
+	void BeginScene(const Core::Camera& camera, float Time) const;
 
-	void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vao);
+	void Submit(const std::shared_ptr<Core::Mesh>& Mesh, const Core_Math::Mat4x4& t = Core_Math::Mat4x4::Identity());
 
 	void EndScene();
 
@@ -31,6 +33,8 @@ private:
 	struct SceneData
 	{
 		Core_Math::Mat4x4 ViewProjectionMatrix;
+		Core_Math::Vector3 LightPosition;
+		float Time;
 	};
 
 	static SceneData* mSceneData;

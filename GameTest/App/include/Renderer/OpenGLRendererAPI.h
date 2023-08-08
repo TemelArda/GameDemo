@@ -13,5 +13,8 @@ public:
 
 	virtual void PrintRenderAPI() override;
 
+	virtual void EnableDepthTest() override;
+
+	virtual void DisableDepthTest() override;
 };
 } // namespace Core_Renderer

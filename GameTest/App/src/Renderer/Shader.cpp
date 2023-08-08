@@ -4,6 +4,8 @@
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 #include "Math/Mat4x4.h"
+#include "Math/Vector4.h"
+#include "Math/Vector3.h"
 #include "Logger.h"
 #include <fstream>
 #include <sstream>
@@ -11,6 +13,14 @@
 
 namespace Core_Renderer
 {
+Shader::Shader()
+	: mRendererID(0)
+{
+	mFilePath = PATH_TO_DEFAULT_SHADER;
+	auto [vertexShader, fragmentShader] = ParseShader(mFilePath);
+	CreateShader(vertexShader, fragmentShader);
+}
+
 Shader::Shader(const std::string& filename)
 	: mRendererID(0)
 {
@@ -37,6 +47,21 @@ void Shader::Unbind() const
 void Shader::SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4)
 {
 	glUniform4f(GetUniformLocation(name), v1, v2, v3, v4);
+}
+
+void Shader::SetUniform4f(const std::string& name, Core_Math::Vector4 values)
+{
+	glUniform4f(GetUniformLocation(name), values.x, values.y, values.z, values.w);
+}
+
+void Shader::SetUniform3f(const std::string& name, float v1, float v2, float v3)
+{
+    glUniform3f(GetUniformLocation(name), v1, v2, v3);
+}
+
+void Shader::SetUniform3f(const std::string& name, Core_Math::Vector3 values)
+{
+	glUniform3f(GetUniformLocation(name), values.x, values.y, values.z);
 }
 
 void Shader::SetUniform1f(const std::string& name, float value)
@@ -90,7 +115,7 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 			ss[(int)type] << line << '\n';
 		}
 	}
-	mShaderSource = ss[0].str() + '\n' + ss[1].str();
+	//mShaderSource = ss[0].str() + '\n' + ss[1].str();
 
 	return {ss[0].str(), ss[1].str()};
 }

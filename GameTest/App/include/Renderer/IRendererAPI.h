@@ -19,6 +19,10 @@ public:
 
 	virtual void DrawIndexed(const std::shared_ptr<Core_Renderer::VertexArray>& vao) = 0;
 
+	virtual void EnableDepthTest() = 0;
+
+	virtual void DisableDepthTest() = 0;
+
 	virtual void PrintRenderAPI() = 0;
 
 private:

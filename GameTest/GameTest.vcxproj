@@ -216,6 +216,9 @@
     <ClInclude Include="App\include\Renderer\VertexArray.h" />
     <ClInclude Include="App\include\Renderer\VertexBuffer.h" />
     <ClInclude Include="App\include\Renderer\Texture.h" />
+    <ClInclude Include="App\include\Material.h" />
+    <ClInclude Include="App\include\Mesh.h" />
+    <ClInclude Include="App\include\ResourceManager.h" />
     <ClInclude Include="App\Systems\include\CircleRenderSystem.h" />
     <ClInclude Include="App\include\Components.h" />
     <ClInclude Include="App\include\CoreDefines.h" />
@@ -236,6 +239,8 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\Material.cpp" />
+    <ClCompile Include="App\src\Mesh.cpp" />
     <ClCompile Include="App\src\Camera.cpp" />
     <ClCompile Include="App\src\Renderer\OpenGLRendererAPI.cpp" />
     <ClCompile Include="App\src\Renderer\RenderCommand.cpp" />
@@ -252,6 +257,7 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\src\Renderer\VertexBuffer.cpp" />
+    <ClCompile Include="App\src\ResourceManager.cpp" />
     <ClCompile Include="App\src\Scene.cpp" />
     <ClCompile Include="App\Systems\src\CircleRenderSystem.cpp" />
     <ClCompile Include="App\Systems\src\ControllerMovementSystem.cpp" />

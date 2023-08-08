@@ -7,6 +7,7 @@
 #include <math.h>  
 //------------------------------------------------------------------------
 #include "app\app.h"
+#include "App/include/ResourceManager.h"
 #include "App/include/Application.h"
 //------------------------------------------------------------------------
 
@@ -28,6 +29,8 @@ enum
 //------------------------------------------------------------------------
 void Init()
 {
+	
+	Core::ResourceManager::GetInstance().Initilize();
 	Core::Application::GetInstance().Initilize();
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
@@ -159,6 +162,7 @@ void Render()
 void Shutdown()
 {	
 	Core::Application::GetInstance().Shutdown();
+	Core::ResourceManager::GetInstance().Shutdown();
 	//------------------------------------------------------------------------
 	// Example Sprite Code
 	delete testSprite;
