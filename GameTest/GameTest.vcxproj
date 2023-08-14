@@ -216,6 +216,7 @@
     <ClInclude Include="App\include\Renderer\Renderer.h" />
     <ClInclude Include="App\include\Renderer\RenderCommand.h" />
     <ClInclude Include="App\include\Renderer\Shader.h" />
+    <ClInclude Include="App\include\Renderer\UniformBuffer.h" />
     <ClInclude Include="App\include\Renderer\VertexArray.h" />
     <ClInclude Include="App\include\Renderer\VertexBuffer.h" />
     <ClInclude Include="App\include\Renderer\Texture.h" />
@@ -242,6 +243,7 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="App\src\GameLayer.cpp" />
     <ClCompile Include="App\src\LayerStack.cpp" />
     <ClCompile Include="App\src\Material.cpp" />
