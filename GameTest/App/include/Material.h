@@ -36,7 +36,7 @@ public:
 
 	virtual std::shared_ptr<Core_Renderer::Shader> GetShader() const = 0;
 protected :
-	MaterialID mNextMaterialId;
+	static MaterialID mNextMaterialId;
 };
 
 class  DefaultMaterial : public Material

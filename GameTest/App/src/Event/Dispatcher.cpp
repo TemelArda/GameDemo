@@ -4,14 +4,11 @@
 
 namespace Core
 {
-Dispatcher::Dispatcher(EventType event)
-{
-	type = event;
-}
 
-void Dispatcher::Subscribe(callback&& cb)
+void Dispatcher::Subscribe(callback&& cb, EventType event)
 {
-	mObservers.push_back(cb);
+	int eventIndex = (int) event;
+	mObservers[eventIndex].push_back(cb);
 }
 
 void Dispatcher::UnSubscribe(callback&& cb)
@@ -20,13 +17,16 @@ void Dispatcher::UnSubscribe(callback&& cb)
 	//mObservers.erase(std::remove(mObservers.begin(), mObservers.end(), cb), mObservers.end());
 }
 
-void Dispatcher::Dispatch(IEvent& mEvent)
-{
-	if(mEvent.GetType() != type)
+void Dispatcher::Dispatch(IEvent& event)
+{	
+	int eventIndex = (int)event.GetType();
+	
+	if(mObservers[eventIndex].empty())
 		return;
-	for (auto& cb : mObservers)
+
+	for (auto&& cb : mObservers[eventIndex])
 	{
-		cb(mEvent);
+		cb(event);
 	}
 }
 } // namespace Core

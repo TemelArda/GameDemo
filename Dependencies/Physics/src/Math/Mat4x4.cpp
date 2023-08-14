@@ -2,52 +2,75 @@
 
 namespace Core_Math
 {
-Mat4x4::Mat4x4()
+inline Mat4x4::Mat4x4() noexcept
 {
+	mRows = std::make_unique<Vector4[]>(4);
 	this->SetMatrix(0.0);
 }
-Mat4x4::Mat4x4(numeral value)
+inline Mat4x4::Mat4x4(numeral value) noexcept
 {
+	mRows = std::make_unique<Vector4[]>(4);
 	this->SetMatrix(value);
 }
-Mat4x4::Mat4x4(std::initializer_list<numeral> list)
+Mat4x4::Mat4x4(std::initializer_list<numeral> list) noexcept
 {
 	if (list.size() != 16)
 		return;
 	auto it = list.begin();
+	std::unique_ptr<Vector4[]> mRows;
 	for (size_t i = 0; i < 4; ++i)
 	{
 		mRows[i].SetVector4(*it, *(it + 1), *(it + 2), *(it + 3));
 		it += 4;
 	}
 }
-Mat4x4::Mat4x4(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& d)
+inline Mat4x4::Mat4x4(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& d) noexcept
 {
+	mRows = std::make_unique<Vector4[]>(4);
 	mRows[0] = a;
 	mRows[1] = b;
 	mRows[2] = c;
 	mRows[3] = d;
 }
-Mat4x4::Mat4x4(numeral a1, numeral a2, numeral a3, numeral a4, 
+inline Mat4x4::Mat4x4(numeral a1, numeral a2, numeral a3, numeral a4,
 numeral b1, numeral b2, numeral b3, numeral b4,
 numeral c1, numeral c2, numeral c3, numeral c4,
-numeral d1, numeral d2, numeral d3, numeral d4)
+numeral d1, numeral d2, numeral d3, numeral d4) noexcept
 {
+	mRows = std::make_unique<Vector4[]>(4);
 	mRows[0].SetVector4(a1, a2, a3, a4);
 	mRows[1].SetVector4(b1, b2, b3, b4);
 	mRows[2].SetVector4(c1, c2, c3, c4);
 	mRows[3].SetVector4(d1, d2, d3, d4);
 }
 
-Mat4x4::Mat4x4(const Mat4x4& other)
+Mat4x4::Mat4x4(const Mat4x4& other) noexcept
 {
+	mRows = std::make_unique<Vector4[]>(4);
 	for (size_t i = 0; i < 4; ++i)
 	{
 		mRows[i] = other.mRows[i];
 	}
 }
 
-void Mat4x4::SetMatrix(numeral value)
+Mat4x4::Mat4x4(Mat4x4&& other) noexcept :
+	mRows(std::move(other.mRows))
+{
+}
+
+
+Mat4x4& Mat4x4::operator=(const Mat4x4& other) noexcept
+{
+	if (this == &other)
+		return *this;
+	for (size_t i = 0; i < 4; i++)
+	{
+		mRows[i] = other.mRows[i];
+	}
+	return *this;
+}
+
+void Mat4x4::SetMatrix(numeral value) noexcept
 {
 	for (size_t i = 0; i < 4; ++i)
 	{

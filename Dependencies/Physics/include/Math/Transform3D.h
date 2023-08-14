@@ -21,6 +21,24 @@ public:
 
 	~Transform3D() = default;
 
+	Transform3D(const Transform3D& transform) noexcept :
+		mPosition(transform.mPosition),
+		mRotation(transform.mRotation),
+		mScale(transform.mScale)
+	{
+	}
+
+	Transform3D(Transform3D&& transform) noexcept :
+		mPosition(std::move(transform.mPosition)),
+		mRotation(std::move(transform.mRotation)),
+		mScale(std::move(transform.mScale))
+	{
+	}
+
+	Transform3D& operator=(const Transform3D& transform) noexcept;
+
+	Transform3D& operator=(Transform3D&& transform) noexcept;
+
 	const Vector3 GetEulerAngles() const;
 
 	const Vector3 GetForwardDirection() const;
@@ -55,6 +73,23 @@ inline Transform3D::Transform3D(const Vector3& position, const Quaternion& rotat
 	: mPosition(position), mRotation(rotation), mScale(scale)
 {
 }
+
+inline Transform3D& Transform3D::operator=(const Transform3D& transform) noexcept
+{
+	mPosition = transform.mPosition;
+	mRotation = transform.mRotation;
+	mScale = transform.mScale;
+	return *this;
+}
+
+inline Transform3D& Transform3D::operator=(Transform3D&& transform) noexcept
+{
+	mPosition = std::move(transform.mPosition);
+	mRotation = std::move(transform.mRotation);
+	mScale = std::move(transform.mScale);
+	return *this;
+}
+
 
 inline const Vector3 Transform3D::GetEulerAngles() const
 {

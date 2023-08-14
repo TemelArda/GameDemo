@@ -9,7 +9,7 @@ using VertexArrayID = uint32_t;
 class VertexArray
 {
 public:
-	VertexArray() ;
+	VertexArray();
 	
 	~VertexArray();
 

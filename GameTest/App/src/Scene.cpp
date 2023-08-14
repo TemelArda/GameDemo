@@ -2,36 +2,40 @@
 #include "../include/Scene.h"
 #include "../include/Components.h"
 #include "../include/Settings.h"
-
+#include "ECS.h"
+#include "../include/Camera.h"
 
 namespace Core
 {
-Scene::Scene()
+Scene::Scene(std::shared_ptr<Core_ECS::Registry> registery)
+	: mRegistry(std::move(registery))
 {
-	mRegistry = std::make_shared<Core_ECS::Registry>();
-	mCircleRenderSystem = std::make_shared<CircleRenderSystem>();
-	//mRectangleRenderSystem = std::make_shared<RectangleRenderSystem>();
-	mControllerMovementSystem = std::make_shared<ControllerMovementSystem>();
+   mCamera = std::make_shared<Camera>();
 }
 
 void Scene::Initilize()
 {
+	mStartTime = std::chrono::high_resolution_clock::now();
 	mRegistry->Initilize();
-
-	RegisterComponents();
-	RegisterSystems();
 	InitilizeEntities();
 }
 
 void Scene::Update(float ts)
 {
-	mControllerMovementSystem->Update(ts);
+
 }
 
 void Scene::Render()
 {
-	mCircleRenderSystem->Render();
-	//mRectangleRenderSystem->Render();
+
+}
+
+const float Scene::GetElapsedTimeInSeconds() const
+{ 
+	auto current = std::chrono::high_resolution_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current - mStartTime);
+	return (float) elapsed.count() / 1000.0f;
+
 }
 
 void Scene::Shutdown()
@@ -39,26 +43,7 @@ void Scene::Shutdown()
 	LOG_INFO("Scene Destroyed");
 }
 
-void Scene::RegisterComponents()
-{
-	mRegistry->RegisterComponentType<Transform2DComponent>();
-	mRegistry->RegisterComponentType<CircleRendererComponent>();
-	mRegistry->RegisterComponentType<RectangleRendererComponent>();
-	mRegistry->RegisterComponentType<LineRendererComponent>();
-	mRegistry->RegisterComponentType<MovementComponent>();
-}
 
-void Scene::RegisterSystems()
-{
-	const auto transform2DComponentID = mRegistry->GetComponentTypeId<Transform2DComponent>();
-	const auto CircleComponentID = mRegistry->GetComponentTypeId<Transform2DComponent>();
-	const auto RectangleComponentID = mRegistry->GetComponentTypeId<RectangleRendererComponent>();
-	const auto MovementComponentID = mRegistry->GetComponentTypeId<MovementComponent>();
-	
-	mRegistry->RegisterSystem(mCircleRenderSystem, {transform2DComponentID, CircleComponentID});
-	//mRegistry->RegisterSystem(mRectangleRenderSystem, {transform2DComponentID, RectangleComponentID});
-	mRegistry->RegisterSystem(mControllerMovementSystem, {transform2DComponentID, MovementComponentID});
-}
 
 void Scene::InitilizeEntities()
 {

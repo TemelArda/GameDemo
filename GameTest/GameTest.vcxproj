@@ -198,6 +198,7 @@
   <ItemGroup>
     <ClInclude Include="App\app.h" />
     <ClInclude Include="App\DirectSound.h" />
+    <ClInclude Include="App\include\GameLayer.h" />
     <ClInclude Include="App\include\Camera.h" />
     <ClInclude Include="App\include\Event\Dispatcher.h" />
     <ClInclude Include="App\include\Event\Event.h" />
@@ -205,6 +206,8 @@
     <ClInclude Include="App\include\Event\KeyEvent.h" />
     <ClInclude Include="App\include\Application.h" />
     <ClInclude Include="App\include\Color.h" />
+    <ClInclude Include="App\include\Layer.h" />
+    <ClInclude Include="App\include\LayerStack.h" />
     <ClInclude Include="App\include\Renderer\BufferLayout.h" />
     <ClInclude Include="App\include\Renderer\Constants.h" />
     <ClInclude Include="App\include\Renderer\IndexBuffer.h" />
@@ -239,6 +242,8 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\GameLayer.cpp" />
+    <ClCompile Include="App\src\LayerStack.cpp" />
     <ClCompile Include="App\src\Material.cpp" />
     <ClCompile Include="App\src\Mesh.cpp" />
     <ClCompile Include="App\src\Camera.cpp" />

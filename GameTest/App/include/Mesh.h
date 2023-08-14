@@ -8,8 +8,18 @@ class Mesh
 {
 public:
 	Mesh();
+
+	Mesh(std::shared_ptr<Core_Renderer::VertexArray> vertexArray, std::shared_ptr<Material> material);
 	
 	~Mesh() = default;
+
+	Mesh(const Mesh&) = default;
+
+	Mesh& operator=(const Mesh&) = default;
+
+	Mesh(Mesh&&) = default;
+
+	Mesh& operator=(Mesh&&) = default;
 
 	void inline SetVertexArray(const std::shared_ptr<Core_Renderer::VertexArray>& vertexArray){mVertexArray = vertexArray;}
 

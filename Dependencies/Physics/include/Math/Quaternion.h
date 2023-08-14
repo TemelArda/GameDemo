@@ -29,6 +29,26 @@ public:
 	
 	~Quaternion() = default;
 
+	Quaternion(const Quaternion& quaternion) noexcept :
+		x(quaternion.x),
+		y(quaternion.y),
+		z(quaternion.z),
+		w(quaternion.w)
+	{
+	}
+
+	Quaternion(Quaternion&& quaternion) noexcept :
+		x(std::move(quaternion.x)),
+		y(std::move(quaternion.y)),
+		z(std::move(quaternion.z)),
+		w(std::move(quaternion.w))
+	{
+	}
+
+	Quaternion& operator=(const Quaternion& quaternion) noexcept = default;
+
+	Quaternion& operator=(Quaternion&& quaternion) noexcept = default;
+
 	void Set(numeral x, numeral y, numeral z, numeral w);
 
 	void Set(const Vector4& values);

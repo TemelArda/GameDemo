@@ -2,61 +2,74 @@
 #include "../../include/Renderer/Renderer.h"
 #include "Logger.h"
 #include "../../include/Renderer/RenderCommand.h"
-#include "../../include/Camera.h"
+#include "../../include/Scene.h"
 #include "../../include/Material.h"
 #include "../../include/Mesh.h"
+#include "../../include/Camera.h" 
 
+
+namespace
+{
+	constexpr const auto MAX_UINT32 { std::numeric_limits<uint32_t>::max() };
+}
 
 namespace Core_Renderer
 {
  
 Renderer::SceneData* Renderer::mSceneData = new Renderer::SceneData;
 
-void Renderer::BeginScene(const Core::Camera& camera, float Time) const
+
+
+void Renderer::BeginScene(const std::weak_ptr<Core::Scene> scene) const
 {
-	mSceneData->ViewProjectionMatrix = camera.GetViewProjection();
-	mSceneData->LightPosition = {-5, -15, 0};
-	mSceneData->Time = Time;
+	const auto scenePtr = scene.lock();
+	
+	if (!scenePtr)
+	{
+		LOG_ERROR("Scene is nullptr");
+		return;
+	}
+
+	mSceneData->ViewProjectionMatrix = scenePtr->GetCamera()->GetViewProjection();
+	mSceneData->lightSources = scenePtr->GetLightSources();
+	mSceneData->Time = scenePtr->GetElapsedTimeInSeconds();
+	
 	RenderCommand::EnableDepthTest();
 }
 
-void Renderer::Submit(const std::shared_ptr<Core::Mesh>& Mesh, const Core_Math::Mat4x4& t )
+void Renderer::Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t )
 {
-	const auto vao = Mesh->GetVertexArray();
-	const auto material = Mesh->GetMaterial();
+	const auto meshPtr = mesh.lock();
+	if (!meshPtr)
+	{
+		LOG_ERROR("Mesh is nullptr");
+		return;
+	}
+	const auto vao = meshPtr->GetVertexArray();
+	const auto material = meshPtr->GetMaterial();
 
-	vao->Bind();
-	vao->GetIndexBuffer()->Bind();
-	material->Bind();
-	const auto& shader = material->GetShader();
-	shader->SetUniform3f("u_LightPosition", mSceneData->LightPosition);
-	shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
-	shader->SetUniform1f("u_Time", mSceneData->Time);
-	shader->SetUniformMat4f("u_Transform", t);
-	
-	RenderCommand::DrawIndexed(vao);
-	
-	material->Unbind();
+
 
 	mRenderSequence.push_back({ vao, material, t });
 }
 void Renderer::EndScene()
 {
-	flush();
-	
+	flush();	
 }
+
 void Renderer::PrintRenderAPI()
 {
 	RenderCommand::PrintRenderAPI();
 }
+
 void Renderer::flush()
 {
 	
 	mRenderSequence.sort();
 	
-	ShaderID currentShader = mRenderSequence.front().Material->GetShaderID();
-	Core::MaterialID currentMaterial = mRenderSequence.front().Material->GetMaterialID();
-	VertexArrayID currentVAO = mRenderSequence.front().VertexArray->GetID();
+	ShaderID currentShader = MAX_UINT32;
+	Core::MaterialID currentMaterial = MAX_UINT32;
+	VertexArrayID currentVAO = MAX_UINT32;
 	
 	while(!mRenderSequence.empty())
 	{
@@ -65,7 +78,7 @@ void Renderer::flush()
 		{
 			data.Material->Bind();
 			const auto& shader = data.Material->GetShader();
-			shader->SetUniform3f("u_LightPosition", mSceneData->LightPosition);
+			//shader->SetUniform3f("u_LightPosition", mSceneData->LightPosition);
 			shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
 			shader->SetUniform1f("u_Time", mSceneData->Time);
 			currentShader = shader->GetID();

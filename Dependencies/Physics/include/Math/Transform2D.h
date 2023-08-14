@@ -21,6 +21,24 @@ public:
 
 	~Transform2D() = default;
 
+	Transform2D(const Transform2D& transform) noexcept :
+		mPosition(transform.mPosition),
+		mRotation(transform.mRotation),
+		mScale(transform.mScale)
+	{
+	}
+
+	Transform2D(Transform2D&& transform) noexcept :
+		mPosition(std::move(transform.mPosition)),
+		mRotation(std::move(transform.mRotation)),
+		mScale(std::move(transform.mScale))
+	{
+	}
+
+	Transform2D& operator=(const Transform2D& transform) noexcept = default;
+
+	Transform2D& operator=(Transform2D&& transform) noexcept = default;
+
 	const Mat4x4& GetModelMatrix() const;
 
 	const Mat4x4& GetInverseModelMatrix() const;

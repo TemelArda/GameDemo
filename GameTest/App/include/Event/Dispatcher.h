@@ -2,11 +2,13 @@
 #include "Event.h"
 #include <functional>
 #include <vector>
+#include <array>
 
 namespace Core
 {
 
-#define BIND_LISTENER_FUNCTION(ListenerFunction) std::bind(&ListenerFunction, this, std::placeholders::_1)
+#define BIND_LISTENER_FUNCTION(Instance, ListenerFunction) std::bind(&ListenerFunction, Instance, std::placeholders::_1)
+
 
 class Dispatcher
 {
@@ -14,22 +16,15 @@ class Dispatcher
 using callback = std::function< void(IEvent&) >;
 
 public:
-	Dispatcher() = delete;
 
-	Dispatcher(Dispatcher& other) = delete;
-
-	Dispatcher(EventType e);
-
-	void Subscribe(callback&& cb);
+	void Subscribe(callback&& cb, EventType event);
 
 	void UnSubscribe(callback&& cb);
 
 	void Dispatch(IEvent& mEvent);
 private:
 
-	std::vector<callback> mObservers;
-	EventType type;
-	
+	std::array<std::vector<callback>, TOTAL_NUMBER_OF_EVENTS > mObservers;
 };
 
 }

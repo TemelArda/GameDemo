@@ -1,18 +1,20 @@
 #pragma once
 #include <memory>
 #include "Event/Dispatcher.h"
-#include "Renderer/Shader.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/VertexArray.h"
-#include "Renderer/Texture.h"
-#include "Camera.h"
-#include <chrono>
-#include "Mesh.h"
+#include "LayerStack.h"
+
+namespace Core_ECS
+{
+class Registry;
+}
+
+namespace Core_Renderer
+{
+class Renderer;
+}
 
 namespace Core
 {
-class Scene;
-
 class Application
 {
 
@@ -31,27 +33,34 @@ public:
 
 	void Shutdown();
 
-	void testFunction(IEvent& E);
+	void PushLayer(std::shared_ptr<Layer> layer);
+
+	void PushOverlay(std::shared_ptr<Layer> layer);
+
+	void PopLayer(std::shared_ptr<Layer> layer);
+
+	void PopOverlay(std::shared_ptr<Layer> layer);
 
 private:
-	std::shared_ptr<Scene> mScene;
 	
+	LayerStack mLayerStack;
 
-	std::shared_ptr<Core_Renderer::VertexArray> mVao;
+	std::shared_ptr<Core_Renderer::Renderer> mRenderer;
 
-	std::unique_ptr<Core_Renderer::Renderer> mRenderer;
-	
-	std::shared_ptr<Camera> mCamera;
-
-	std::unique_ptr<Dispatcher> mDispatcher;
-
-	std::vector<std::shared_ptr<Mesh>> mMeshes;
+	std::shared_ptr<Dispatcher> mDispatcher;
 	
 	Application() = default;
 	
 	~Application() = default;
 
-	std::chrono::time_point<std::chrono::steady_clock> mStartTime;
+	std::shared_ptr<Core_ECS::Registry> mRegistry;
+
+private:
+
+	void RegisterSystems();
+
+	void RegisterComponents();
+
 };
 
 

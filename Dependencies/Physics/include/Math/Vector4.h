@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include <math.h>
 #include <assert.h>
+#include <utility>
 
 
 namespace Core_Math
@@ -20,21 +21,35 @@ public:
 	numeral w;
 public:
 
-	Vector4();
+	Vector4() noexcept;
 
-	Vector4(numeral value);
+	Vector4(numeral value) noexcept;
 
-	Vector4(numeral x, numeral y, numeral z, numeral w);
+	Vector4(numeral x, numeral y, numeral z, numeral w) noexcept;
 
 	~Vector4() = default;
 
-	Vector4(const Vector4& vector);
+	Vector4(const Vector4& vector) noexcept;
 
-	void SetVector4(numeral value);
+	Vector4(Vector4&& vector) noexcept :
+		x(std::move(vector.x)),
+		y(std::move(vector.y)),
+		z(std::move(vector.z)),
+		w(std::move(vector.w))
+	{
+	}
 
-	void SetVector4(numeral x, numeral y, numeral z, numeral w);
+	Vector4& operator=(const Vector4& vector) noexcept = default;
 
-	void SetToZero();
+	Vector4& operator=(Vector4&& vector) noexcept = default;
+
+	void operator=(const std::initializer_list<numeral>& values);
+
+	void SetVector4(numeral value) noexcept;
+
+	void SetVector4(numeral x, numeral y, numeral z, numeral w) noexcept;
+
+	void SetToZero() noexcept;
 
 	const numeral Magnitude() const;
 
@@ -51,10 +66,6 @@ public:
 	bool IsNormalized() const;
 
 	bool IsFinite() const;
-
-	void operator=(const Vector4& vector);
-
-	void operator=(const std::initializer_list<numeral>& values);
 
 	bool operator==(const Vector4& vector) const;
 
@@ -88,30 +99,28 @@ public:
 	friend Vector4 operator/(const Vector4& vector1, const Vector4& vector2);
 };
 
-inline Vector4::Vector4()
+inline Vector4::Vector4() noexcept
 	: x(0.0f), y(0.0f), z(0.0f), w(0.0f)
 {
 }
 
-inline Vector4::Vector4(numeral value)
+inline Vector4::Vector4(numeral value) noexcept
 	: x(value), y(value), z(value), w(value)
 {
 }
 
-inline Vector4::Vector4(numeral x, numeral y, numeral z, numeral w)
+inline Vector4::Vector4(numeral x, numeral y, numeral z, numeral w) noexcept
 	: x(x), y(y), z(z), w(w)
 {
 }
 
-inline Vector4::Vector4(const Vector4& vector)
+inline Vector4::Vector4(const Vector4& vector) noexcept
+	: x(vector.x), y(vector.y), z(vector.z), w(vector.w)
 {
-	x = vector.x;
-	y = vector.y;
-	z = vector.z;
-	w = vector.w;
 }
 
-inline void Vector4::SetVector4(numeral value)
+
+inline void Vector4::SetVector4(numeral value) noexcept
 {
 	x = value;
 	y = value;
@@ -119,7 +128,7 @@ inline void Vector4::SetVector4(numeral value)
 	w = value;
 }
 
-inline void Vector4::SetVector4(numeral x, numeral y, numeral z, numeral w)
+inline void Vector4::SetVector4(numeral x, numeral y, numeral z, numeral w) noexcept
 {
 	this->x = x;
 	this->y = y;
@@ -127,7 +136,7 @@ inline void Vector4::SetVector4(numeral x, numeral y, numeral z, numeral w)
 	this->w = w;
 }
 
-inline void Vector4::SetToZero()
+inline void Vector4::SetToZero() noexcept
 {
 	x = 0.0f;
 	y = 0.0f;
@@ -153,14 +162,6 @@ inline numeral Vector4::Dot(const Vector4& vector) const
 inline bool Vector4::IsFinite() const
 {
 	return isfinite<numeral>(x) && isfinite<numeral>(y) && isfinite<numeral>(z) && isfinite<numeral>(w);
-}
-
-inline void Vector4::operator=(const Vector4& vector)
-{
-	x = vector.x;
-	y = vector.y;
-	z = vector.z;
-	w = vector.w;
 }
 
 inline void Vector4::operator=(const std::initializer_list<numeral>& values)
@@ -242,15 +243,15 @@ inline const numeral& Vector4::operator[](int index) const
 {
 	if (index > 3)
 		assert(false);
+
 	return (&x)[index];
 }
 
 inline numeral& Vector4::operator[](int index)
 {
 	if (index > 3)
-	{
 		assert(false);
-	}
+
 	return (&x)[index];
 }
 

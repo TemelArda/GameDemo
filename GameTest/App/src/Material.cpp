@@ -4,6 +4,8 @@
 
 namespace Core
 {
+MaterialID DefaultMaterial::mNextMaterialId = 0;
+
 DefaultMaterial::DefaultMaterial()
 	: AmbientColor(.9f), DiffuseColor(.9f), SpecularColor(.9f), SpecularPower(1.0f)
 {

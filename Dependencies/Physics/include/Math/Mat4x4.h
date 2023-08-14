@@ -3,32 +3,39 @@
 #include <initializer_list>
 #include "Vector4.h"
 #include <cassert>
+#include <memory>
 
 namespace Core_Math
 {
 class Mat4x4
 {
 public:
-	Mat4x4();
+	Mat4x4() noexcept;
 
-	Mat4x4(numeral value);
+	Mat4x4(numeral value) noexcept;
 
-	Mat4x4(std::initializer_list<numeral> list);
+	Mat4x4(std::initializer_list<numeral> list) noexcept;
 
-	Mat4x4(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& d);
+	Mat4x4(const Vector4& a, const Vector4& b, const Vector4& c, const Vector4& d) noexcept;
 
 	Mat4x4(
 		numeral a1, numeral a2, numeral a3, numeral a4,
 		numeral b1, numeral b2, numeral b3, numeral b4,
 		numeral c1, numeral c2, numeral c3, numeral c4,
 		numeral d1, numeral d2, numeral d3, numeral d4
-		);
+		) noexcept;
 
 	~Mat4x4() = default;
 
-	Mat4x4(const Mat4x4& other);
+	Mat4x4(const Mat4x4& other) noexcept;
+	
+	Mat4x4(Mat4x4&& other) noexcept;
 
-	void SetMatrix(numeral value);
+	Mat4x4& operator=(const Mat4x4& other) noexcept;
+
+	Mat4x4& operator=(Mat4x4&& other) noexcept = default;
+
+	void SetMatrix(numeral value) noexcept;
 
 	Vector4 GetRow(int index) const;
 
@@ -62,8 +69,9 @@ public:
 
 	Mat4x4 operator*(numeral value);
 private:
-	Vector4 mRows[4];
+	std::unique_ptr<Vector4[]> mRows;
 };
+
 
 const inline Vector4& Mat4x4::operator[](int i) const
 {

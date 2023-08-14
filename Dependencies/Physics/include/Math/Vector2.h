@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include <math.h>
 #include <assert.h>
+#include <utility>
 
 namespace Core_Math
 {
@@ -22,19 +23,31 @@ public:
 
 public:
 
-	Vector2();
+	Vector2() noexcept;
 
-	Vector2(numeral value);
+	Vector2(numeral value) noexcept;
 
-	Vector2(numeral x, numeral y);
+	Vector2(numeral x, numeral y) noexcept;
 
 	~Vector2() = default;
 
-	Vector2(const Vector2& vector);
+	Vector2(const Vector2& vector) noexcept;
 
-	void SetVector2(numeral x, numeral y);
+	Vector2(Vector2&& vector) noexcept :
+		x(std::move(vector.x)),
+		y(std::move(vector.y))
+	{
+	}
 
-	void SetToZero();
+	Vector2& operator=(const Vector2& vector) noexcept = default;
+
+	void operator=(const std::initializer_list<numeral>& values);
+
+	Vector2& operator=(Vector2&& vector) noexcept = default;
+
+	void SetVector2(numeral x, numeral y) noexcept;
+
+	void SetToZero() noexcept;
 
 	const numeral Magnitude() const;
 
@@ -53,10 +66,6 @@ public:
 	bool IsNormalized() const;
 
 	bool IsFinite() const;
-
-	void operator=(const Vector2& vector);
-
-	void operator=(const std::initializer_list<numeral>& values);
 
 	bool operator==(const Vector2& vector) const;
 
@@ -90,34 +99,32 @@ public:
 	friend Vector2 operator/(const Vector2& vector1, const Vector2& vector2);
 };
 
-inline Vector2::Vector2()
+inline Vector2::Vector2() noexcept
 	: x(0.0f), y(0.0f)
 {
 }
 
-inline Vector2::Vector2(numeral value)
+inline Vector2::Vector2(numeral value) noexcept
 	: x(value), y(value)
 {
 }
 
-inline Vector2::Vector2(numeral x, numeral y)
+inline Vector2::Vector2(numeral x, numeral y) noexcept
 	: x(x), y(y)
 {
 }
 
-inline Vector2::Vector2(const Vector2& vector)
+inline Vector2::Vector2(const Vector2& vector) noexcept
+	: x(vector.x), y(vector.y)
 {
-	x = vector.x;
-	y = vector.y;
 }
-
-inline void Vector2::SetVector2(numeral x, numeral y)
+inline void Vector2::SetVector2(numeral x, numeral y) noexcept
 {
 	this->x = x;
 	this->y = y;
 }
 
-inline void Vector2::SetToZero()
+inline void Vector2::SetToZero() noexcept
 {
 	x = 0.0f;
 	y = 0.0f;
@@ -147,12 +154,6 @@ inline Vector2 Vector2::PerpendicularVector(const Vector2& vector2, Direction di
 inline bool Vector2::IsFinite() const
 {
 	return isfinite<numeral>(x) && isfinite<numeral>(y);
-}
-
-inline void Vector2::operator=(const Vector2& vector)
-{
-	x = vector.x;
-	y = vector.y;
 }
 
 inline void Vector2::operator=(const std::initializer_list<numeral>& values)

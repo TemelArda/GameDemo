@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include <math.h>
 #include <assert.h>
+#include <utility>
 
 namespace Core_Math
 {
@@ -17,19 +18,32 @@ public:
 	numeral z;
 public:
 
-	Vector3();
+	Vector3() noexcept;
 
-	Vector3(numeral value);
+	Vector3(numeral value) noexcept;
 
-	Vector3(numeral x, numeral y, numeral z);
+	Vector3(numeral x, numeral y, numeral z) noexcept;
 
 	~Vector3() = default;
 
-	Vector3(const Vector3& vector);
+	Vector3(const Vector3& vector) noexcept;
 
-	void SetVector3(numeral x, numeral y, numeral z);
+	Vector3(Vector3&& vector) noexcept :
+		x(std::move(vector.x)),
+		y(std::move(vector.y)),
+		z(std::move(vector.z))
+	{
+	}
 
-	void SetToZero();
+	Vector3& operator=(const Vector3& vector) noexcept = default;
+
+	void operator=(const std::initializer_list<numeral>& values) noexcept;
+
+	Vector3& operator=(Vector3&& vector) noexcept = default;
+
+	void SetVector3(numeral x, numeral y, numeral z) noexcept;
+
+	void SetToZero() noexcept;
 
 	const numeral Magnitude() const;
 
@@ -48,10 +62,6 @@ public:
 	bool IsNormalized() const;
 
 	bool IsFinite() const;
-
-	void operator=(const Vector3& vector);
-
-	void operator=(const std::initializer_list<numeral>& values);
 
 	bool operator==(const Vector3& vector) const;
 
@@ -87,36 +97,34 @@ public:
 	static Vector3 Cross(const Vector3& vector1, const Vector3& vector2);
 };
 
-inline Vector3::Vector3()
+inline Vector3::Vector3() noexcept
 	: x(0.0f), y(0.0f), z(0.0f)
 {
 }
 
-inline Vector3::Vector3(numeral value)
+inline Vector3::Vector3(numeral value) noexcept
 	: x(value), y(value), z(value)
 {
 }
 
-inline Vector3::Vector3(numeral x, numeral y, numeral z)
+inline Vector3::Vector3(numeral x, numeral y, numeral z) noexcept
 	: x(x), y(y), z(z)
 {
 }
 
-inline Vector3::Vector3(const Vector3& vector)
+inline Vector3::Vector3(const Vector3& vector) noexcept
+	: x(vector.x), y(vector.y), z(vector.z)
 {
-	x = vector.x;
-	y = vector.y;
-	z = vector.z;
 }
 
-inline void Vector3::SetVector3(numeral x, numeral y, numeral z)
+inline void Vector3::SetVector3(numeral x, numeral y, numeral z) noexcept
 {
 	this->x = x;
 	this->y = y;
 	this->z = z;
 }
 
-inline void Vector3::SetToZero()
+inline void Vector3::SetToZero() noexcept
 {
 	x = 0.0f;
 	y = 0.0f;
@@ -143,14 +151,7 @@ inline bool Vector3::IsFinite() const
 	return isfinite<numeral>(x) && isfinite<numeral>(y) && isfinite<numeral>(z);
 }
 
-inline void Vector3::operator=(const Vector3& vector)
-{
-	x = vector.x;
-	y = vector.y;
-	z = vector.z;
-}
-
-inline void Vector3::operator=(const std::initializer_list<numeral>& values)
+inline void Vector3::operator=(const std::initializer_list<numeral>& values) noexcept
 {
 	if (values.size() != 3)
 	{
@@ -160,6 +161,7 @@ inline void Vector3::operator=(const std::initializer_list<numeral>& values)
 	y = *(values.begin() + 1);
 	z = *(values.begin() + 2);
 }
+
 
 inline bool Vector3::operator==(const Vector3& vector) const
 {

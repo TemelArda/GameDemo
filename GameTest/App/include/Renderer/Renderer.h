@@ -9,6 +9,8 @@ namespace Core
 	class Camera;
 	class Material;
 	class Mesh;
+	class Scene;
+	struct LightSource;
 }
 
 namespace Core_Renderer
@@ -19,20 +21,22 @@ class Renderer
 private:
 	struct RenderData
 	{
-
 		bool operator<(const RenderData& other);
+		
 		std::shared_ptr<VertexArray> VertexArray;
+		
 		std::shared_ptr<Core::Material> Material;
+		
 		Core_Math::Mat4x4 Transform;
-
-	
 	};
 
 	struct SceneData
 	{
 		Core_Math::Mat4x4 ViewProjectionMatrix;
-		Core_Math::Vector3 LightPosition;
-		float Time;
+		
+		std::vector<Core::LightSource> lightSources;
+		
+		float Time = 0;
 	};
 public:
 
@@ -40,16 +44,18 @@ public:
 
 	~Renderer() = default;
 
-	void BeginScene(const Core::Camera& camera, float Time) const;
+	void BeginScene(const std::weak_ptr<Core::Scene> scene) const;
 
-	void Submit(const std::shared_ptr<Core::Mesh>& Mesh, const Core_Math::Mat4x4& t = Core_Math::Mat4x4::Identity());
+	void Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t = Core_Math::Mat4x4::Identity());
 
 	void EndScene();
 
 	static void PrintRenderAPI();
 private:
-	void flush();
 	static SceneData* mSceneData;
+
 	std::list<RenderData> mRenderSequence;
+	
+	void flush();
 };
 }
