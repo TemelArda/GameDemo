@@ -2,7 +2,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 #include <memory>
-#include "Math/Vector4.h"
+#include "Math/Vector3.h"
 
 
 namespace Core
@@ -42,13 +42,13 @@ protected :
 class  DefaultMaterial : public Material
 {
 public:
-	Core_Math::Vector4 AmbientColor;
+	Core_Math::Vector3 AmbientColor;
+						  
+	Core_Math::Vector3 DiffuseColor;
+						  
+	Core_Math::Vector3 SpecularColor;
 
-	Core_Math::Vector4 DiffuseColor;
-
-	Core_Math::Vector4 SpecularColor;
-
-	float SpecularPower;
+	float Shininess;
 
 	std::shared_ptr<Core_Renderer::Texture> Texture;
 
@@ -69,12 +69,12 @@ public:
 	virtual void Bind() override
 	{
 		mShader->Bind();
+		mShader->SetUniform3f("u_Ambient_product", AmbientColor);
+		mShader->SetUniform3f("u_Diffuse_product", DiffuseColor);
+		mShader->SetUniform3f("u_Specular_product", SpecularColor);
+		mShader->SetUniform1f("u_Shininess", Shininess);
 		Texture->Bind();
 		mShader->SetUniform1i("u_Texture", 0);
-		mShader->SetUniform4f("u_AmbientProduct", AmbientColor);
-		mShader->SetUniform4f("u_DiffuseColor", DiffuseColor);
-		mShader->SetUniform4f("u_SpecularColor", SpecularColor);
-		mShader->SetUniform1f("u_SpecularPower", SpecularPower);
 	}
 
 	virtual void Unbind() override

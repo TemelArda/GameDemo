@@ -7,7 +7,7 @@
 #include "../include/Camera.h"
 #include "../include/Renderer/Renderer.h"
 #include "../include/Mesh.h"
-
+#include "../include/CoreDefines.h"
 
 
 namespace Core
@@ -20,6 +20,7 @@ GameLayer::GameLayer(std::shared_ptr<Core_Renderer::Renderer> renderer, std::sha
 
 void GameLayer::OnAttach()
 {
+	ResourceManager::GetInstance().Initilize();
 	mScene->Initilize();
 }
 
@@ -41,10 +42,11 @@ void GameLayer::OnRender()
 		return;
 	Core_Math::Transform3D transform;
 	mRenderer->BeginScene(mScene);
-	for (size_t i = 0; i < mMeshes.size(); ++i)
+	for (int i = 0; i < mMeshes.size(); ++i)
 	{
-		float x = (float)i - (mMeshes.size() * 0.5f);
-		transform.mPosition = { -x , 0.0f, 0.0f };
+		float x = (- i + (int)mMeshes.size() / 2) * 2;
+		transform.mPosition = { x , 0.0f, 0.0f };
+		transform.Rotate({mScene->GetElapsedTimeInMilliSeconds()/100 * PI/180, 0.0f, 0.0f});
 		mRenderer->Submit(mMeshes[i], transform.GetModelMatrix());
 	}
 
@@ -65,25 +67,41 @@ void GameLayer::OnEvent(IEvent& e)
 	const auto& texture = ResourceManager::LoadTexture("blue_eyes.bmp", "BlueEyes");
 
 	//Create Materials
-	const auto& material = std::make_shared<DefaultMaterial>();
-	material->Texture = texture;
-	ResourceManager::LoadMaterial(material, "BlueEyes");
+	const auto& materialTextured = std::make_shared<DefaultMaterial>();
+	materialTextured->Texture = texture;
+	materialTextured->DiffuseColor = { .85f, .85f, .85f };
+	materialTextured->AmbientColor = { .85f, .85f, .85f };
+	materialTextured->SpecularColor = { .85f, .85f, .85f };
+	materialTextured->Shininess = 1.0f;
+	ResourceManager::LoadMaterial(materialTextured, "BlueEyes");
 
 	const auto& materialRed = std::make_shared<DefaultMaterial>();
 	materialRed->Texture = texture;
-	materialRed->DiffuseColor = { .85f, .1f, .05f, 1.0f };
-	ResourceManager::LoadMaterial(materialRed, "RedEyes");
+	materialRed->DiffuseColor = {.85f, .1f, .05f};
+	materialRed->AmbientColor = {.85f, .1f, .05f};
+	materialRed->SpecularColor = {.85f, .1f, .05f};
+	materialRed->Shininess = 10.0f;
+	ResourceManager::LoadMaterial(materialRed, "Red");
+
+	const auto& materialGrey = std::make_shared<DefaultMaterial>();
+	materialGrey->Texture = ResourceManager::GetWhiteTexture();
+	materialGrey->DiffuseColor = { .5f, .5f, .5f };
+	materialGrey->AmbientColor = { .5f, .5f, .5f };
+	materialGrey->SpecularColor = { .5f, .5f, .5f };
+	materialGrey->Shininess = 30.0f;
+	ResourceManager::LoadMaterial(materialGrey, "grey");
 
 	// create Meshes
-	const auto& meshCube = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), material);
-	const auto& meshQuad = std::make_shared<Mesh>(ResourceManager::GetInstance().GetQuadVertexArray(), materialRed);
+	const auto& meshCube1 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialTextured);
+	const auto& meshCube2 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialRed);
+	const auto& meshCube3 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialGrey);
 
 	//default mesh
 	mMeshes.push_back(std::make_shared <Mesh>());
-	mMeshes.push_back(meshCube);
-	mMeshes.push_back(meshQuad);
+	mMeshes.push_back(meshCube1);
+	mMeshes.push_back(meshCube2);
+	mMeshes.push_back(meshCube3);
 }
-
 void GameLayer::Enable()
 {
 	mIsEnabled = true;

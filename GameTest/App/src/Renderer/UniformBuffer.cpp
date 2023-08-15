@@ -18,6 +18,7 @@ UniformBuffer::~UniformBuffer()
 {
 	glDeleteBuffers(1, &mBufferID);
 }
+
 void UniformBuffer::SetData(const void* data, const uint32_t offset, const uint32_t size)
 {
 	glBindBuffer(GL_UNIFORM_BUFFER, mBufferID);

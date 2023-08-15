@@ -1,37 +1,38 @@
 #include "stdafx.h"
 #include "../include/ResourceManager.h"
 #include <assert.h>
+#include <mutex>
 
 static float vertexDataCube[] = {
-	-0.5f, -0.5f, 0.0f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-left  front face
-	 0.5f, -0.5f, 0.0f, 0.0, 0.0, -1.0, 1.0, 0.0,// bot-right front face
-	 0.5f,  0.5f, 0.0f, 0.0, 0.0, -1.0, 1.0, 1.0,// top-right  front face
-	 -0.5f, 0.5f, 0.0f, 0.0, 0.0, -1.0, 0.0, 1.0,// top-left front face
+	-0.5f, -0.5f, 0.0f, 0.0, 0.0, 1.0, 0.0, 0.0,// bot-left  front face
+	 0.5f, -0.5f, 0.0f, 0.0, 0.0, 1.0, 1.0, 0.0,// bot-right front face
+	 0.5f,  0.5f, 0.0f, 0.0, 0.0, 1.0, 1.0, 1.0,// top-right  front face
+	 -0.5f, 0.5f, 0.0f, 0.0, 0.0, 1.0, 0.0, 1.0,// top-left front face
 
 	 -0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  right face
 	 -0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-right right face
 	 -0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  right face
 	 -0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left right face
 
-	 -0.5f, -0.5f,  0.5f, 0.0, 0.0, 0.0, 0.0, 0.0,// bot-left  back face
-	 0.5f, -0.5f, 0.5f, 0.0, 0.0, 0.0, 0.0, 0.0,// bot-right back face
-	 0.5f, 0.5f, 0.5f, 0.0, 0.0, 0.0, 0.0, 0.0,// top-right  back face
-	 -0.5f, 0.5f, 0.5f, 0.0, 0.0, 0.0, 0.0, 0.0,// top-left back face
+	 -0.5f, -0.5f,  0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-left  back face
+	 0.5f, -0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-right back face
+	 0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-right  back face
+	 -0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-left back face
 
-	 0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  left face
-	 0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-right left face
-	 0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  left face
-	 0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left left face
+	 0.5f, -0.5f, 0.0f, -1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  left face
+	 0.5f, -0.5f, 0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// bot-right left face
+	 0.5f, 0.5f, 0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// top-right  left face
+	 0.5f, 0.5f, 0.0f, -1.0, 0.0, 0.0, 0.0, 0.0,// top-left left face
 
-	 0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  top face
-	 -0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-right top face
-	 -0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  top face
-	 0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left top face
+	 0.5f, 0.5f, 0.0f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-left  top face
+	 -0.5f, 0.5f, 0.0f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-right top face
+	 -0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-right  top face
+	 0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-left top face
 
-		0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  bot face
-	 -0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-right bot face
-	 -0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  bot face
-	 0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left bot face
+		0.5f, -0.5f, 0.0f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-left  bot face
+	 -0.5f, -0.5f, 0.0f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-right bot face
+	 -0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-right  bot face
+	 0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-left bot face
 };
 
 static uint32_t indicesCube[] = {
@@ -61,51 +62,53 @@ namespace Core
 	std::unordered_map<std::string, std::shared_ptr<Core_Renderer::VertexArray>> ResourceManager::mVertexArrays = std::unordered_map<std::string, std::shared_ptr<Core_Renderer::VertexArray>>();
 	std::unordered_map<std::string, std::shared_ptr<Material>> ResourceManager::mMaterials = std::unordered_map<std::string, std::shared_ptr<Material>>();
 
-
+	std::once_flag flag1;
 void ResourceManager::Initilize()
 {
-	const auto& whiteTexture = std::make_shared<Core_Renderer::Texture>();
-	mTextures.insert(std::make_pair("White", whiteTexture));
+	std::call_once(flag1, []() {
+		const auto& whiteTexture = std::make_shared<Core_Renderer::Texture>();
+		mTextures.insert(std::make_pair("White", whiteTexture));
 
-	const auto& defaultShader = std::make_shared<Core_Renderer::Shader>();
-	mShaders.insert(std::make_pair("Default", defaultShader));
+		const auto& defaultShader = std::make_shared<Core_Renderer::Shader>();
+		mShaders.insert(std::make_pair("Default", defaultShader));
 
-	const auto& defaultMaterial = std::make_shared<DefaultMaterial>();
-	mMaterials.insert(std::make_pair("Default", defaultMaterial));
+		const auto& defaultMaterial = std::make_shared<DefaultMaterial>();
+		mMaterials.insert(std::make_pair("Default", defaultMaterial));
 
-	const auto& cubeVertexArray = std::make_shared<Core_Renderer::VertexArray>();
-	auto IboCube = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 36);
-	auto VboCube = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 24 * 8 * sizeof(float), 24);
+		const auto& cubeVertexArray = std::make_shared<Core_Renderer::VertexArray>();
+		auto IboCube = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 36);
+		auto VboCube = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 24 * 8 * sizeof(float), 24);
 
-	{
-		Core_Renderer::BufferLayout layout = {
-			{Core_Renderer::ShaderDataType::Float3, "a_Position"},
-			{Core_Renderer::ShaderDataType::Float3, "a_Normals" },
-			{Core_Renderer::ShaderDataType::Float2, "a_TexCoord" },
-		};
-		VboCube->SetLayout(layout);
-	}
+		{
+			Core_Renderer::BufferLayout layout = {
+				{Core_Renderer::ShaderDataType::Float3, "a_Position"},
+				{Core_Renderer::ShaderDataType::Float3, "a_Normals" },
+				{Core_Renderer::ShaderDataType::Float2, "a_TexCoord" },
+			};
+			VboCube->SetLayout(layout);
+		}
 
-	cubeVertexArray->AddVertexBuffer(VboCube);
-	cubeVertexArray->SetIndexBuffer(IboCube);
-	mVertexArrays.insert(std::make_pair("Cube", cubeVertexArray));
+		cubeVertexArray->AddVertexBuffer(VboCube);
+		cubeVertexArray->SetIndexBuffer(IboCube);
+		mVertexArrays.insert(std::make_pair("Cube", cubeVertexArray));
 
-	const auto& quadVertexArray = std::make_shared<Core_Renderer::VertexArray>();
-	auto IboQuad = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 6); //Only taking the front face of the cube
-	auto VboQuad = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 4 * 8 * sizeof(float), 4);
+		const auto& quadVertexArray = std::make_shared<Core_Renderer::VertexArray>();
+		auto IboQuad = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 6); //Only taking the front face of the cube
+		auto VboQuad = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 4 * 8 * sizeof(float), 4);
 
-	{
-		Core_Renderer::BufferLayout layout = {
-			{Core_Renderer::ShaderDataType::Float3, "a_Position"},
-			{Core_Renderer::ShaderDataType::Float3, "a_Normals" },
-			{Core_Renderer::ShaderDataType::Float2, "a_TexCoord" },
-		};
-		VboQuad->SetLayout(layout);
-	}
+		{
+			Core_Renderer::BufferLayout layout = {
+				{Core_Renderer::ShaderDataType::Float3, "a_Position"},
+				{Core_Renderer::ShaderDataType::Float3, "a_Normals" },
+				{Core_Renderer::ShaderDataType::Float2, "a_TexCoord" },
+			};
+			VboQuad->SetLayout(layout);
+		}
 
-	quadVertexArray->AddVertexBuffer(VboQuad);
-	quadVertexArray->SetIndexBuffer(IboQuad);
-	mVertexArrays.insert(std::make_pair("Quad", quadVertexArray));
+		quadVertexArray->AddVertexBuffer(VboQuad);
+		quadVertexArray->SetIndexBuffer(IboQuad);
+		mVertexArrays.insert(std::make_pair("Quad", quadVertexArray));
+	});
 }
 void ResourceManager::Shutdown()
 {

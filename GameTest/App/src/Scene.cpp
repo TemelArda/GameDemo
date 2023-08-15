@@ -16,7 +16,6 @@ Scene::Scene(std::shared_ptr<Core_ECS::Registry> registery)
 void Scene::Initilize()
 {
 	mStartTime = std::chrono::high_resolution_clock::now();
-	mRegistry->Initilize();
 	InitilizeEntities();
 }
 
@@ -34,7 +33,15 @@ const float Scene::GetElapsedTimeInSeconds() const
 { 
 	auto current = std::chrono::high_resolution_clock::now();
 	auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(current - mStartTime);
-	return (float) elapsed.count() / 1000.0f;
+	return (float) elapsed.count();
+
+}
+
+const float Scene::GetElapsedTimeInMilliSeconds() const
+{
+	auto current = std::chrono::high_resolution_clock::now();
+	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current - mStartTime);
+	return (float)elapsed.count();
 
 }
 

@@ -103,7 +103,7 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 
 	while (std::getline(stream, line))
 	{
-		if(line.find("#shader") != std::string::npos)
+		if(line.find("#type") != std::string::npos)
 		{
 			if (line.find("vertex") != std::string::npos)
 				type = ShaderType::VERTEX;

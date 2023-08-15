@@ -16,12 +16,13 @@ void Application::Initilize()
 		mRenderer = std::make_shared<Core_Renderer::Renderer>();
 	if (!mRegistry)
 		mRegistry = std::make_shared<Core_ECS::Registry>();
+	
 
 	mRenderer->PrintRenderAPI();
 	
 	mRegistry->Initilize();
-	RegisterSystems();
 	RegisterComponents();
+	RegisterSystems();
 
 	// Initilize the layer stack with the game layer
 	const auto gameLayer = std::make_shared<GameLayer>(mRenderer, mRegistry);

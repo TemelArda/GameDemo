@@ -76,11 +76,11 @@ void Renderer::flush()
 		const auto& data = mRenderSequence.front();
 		if (data.Material->GetShaderID() != currentShader)
 		{
-			data.Material->Bind();
 			const auto& shader = data.Material->GetShader();
 			//shader->SetUniform3f("u_LightPosition", mSceneData->LightPosition);
+			shader->Bind();
 			shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
-			shader->SetUniform1f("u_Time", mSceneData->Time);
+			//shader->SetUniform1f("u_Time", mSceneData->Time);
 			currentShader = shader->GetID();
 		}
 		if (data.Material->GetMaterialID() != currentMaterial)
@@ -91,6 +91,7 @@ void Renderer::flush()
 		if (data.VertexArray->GetID() != currentVAO)
 		{
 			data.VertexArray->Bind();
+			data.VertexArray->GetIndexBuffer()->Bind();
 			currentVAO = data.VertexArray->GetID();
 		}
 		const auto & shader = data.Material->GetShader();

@@ -43,6 +43,8 @@ public:
 	const std::vector<LightSource>& GetLightSources() const { return mLightSources; }
 
 	const float GetElapsedTimeInSeconds() const;
+
+	const float GetElapsedTimeInMilliSeconds() const;
 private:
 	std::shared_ptr<Core_ECS::Registry> mRegistry;
 

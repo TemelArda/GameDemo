@@ -1,14 +1,18 @@
 #include "../include/Registry.h"
 #include "Logger.h"
-
+#include <mutex>
 
 namespace Core_ECS
 {
+std::once_flag flag1;
+
 void Registry::Initilize()
 {
-	mEntityManager = std::make_shared<EntityManager>();
-	mComponentManager = std::make_shared<ComponentManager>();
-	mSystemManager = std::make_shared<SystemManager>();
+	std::call_once(flag1, [&]() {
+		mEntityManager = std::make_shared<EntityManager>();
+		mComponentManager = std::make_shared<ComponentManager>();
+		mSystemManager = std::make_shared<SystemManager>();
+	});
 }
 
 void Registry::Shutdown()
