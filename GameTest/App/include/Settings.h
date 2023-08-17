@@ -8,6 +8,7 @@
 #define APP_USE_VIRTUAL_RES		true					// Set true to use virtual coords.					
 #define APP_VIRTUAL_WIDTH		(1200)					// This will be the effective x resolution regardless of actual screen/window res.
 #define APP_VIRTUAL_HEIGHT		(900)					// This will be the effective y resolution regardless of actual screen/window res.
+#define APP_ASPECT_RATIO		((float)APP_VIRTUAL_WIDTH/(float)APP_VIRTUAL_HEIGHT)
 
 #define APP_MAX_FRAME_RATE		(60.0f)					// Maximum update rate.
 #define APP_INIT_WINDOW_WIDTH	(APP_VIRTUAL_WIDTH)		// Initial window width.

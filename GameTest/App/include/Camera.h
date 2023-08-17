@@ -10,11 +10,11 @@ public:
 
 	Camera(Core_Math::Vector3 pos, Core_Math::Vector3 dir);
 
-	Camera(const float left, const float right, const float bottom, const float top, const float n, const float f);
-
 	~Camera() = default;
 
-	void SetProjectionMatrix(const float left, const float right, const float bottom, const float top, const float n, const float f);
+	void SetProjectionMatrixToOrtho(const float left, const float right, const float bottom, const float top, const float n, const float f);
+
+	void SetProjectionMatrixToPerspective(const float fov, const float aspectRatio, const float n, const float f);
 
 	void SetPosition(const Core_Math::Vector3& position);
 
@@ -36,7 +36,7 @@ public:
 
 	void Rotate(const Core_Math::Vector3& rotation){ mTransform.Rotate(rotation); SetViewMatrix(); }
 
-	void LookAt(const Core_Math::Vector3& target){ mTransform.LookAt(target, {0, 1, 0}); SetViewMatrix(); }
+	void LookAt(const Core_Math::Vector3& target){ Core_Math::LookAt(mTransform, target, {0, 1, 0}); SetViewMatrix(); }
 
 private:
 	

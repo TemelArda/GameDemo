@@ -91,16 +91,26 @@ void GameLayer::OnEvent(IEvent& e)
 	materialGrey->Shininess = 30.0f;
 	ResourceManager::LoadMaterial(materialGrey, "grey");
 
+	const auto& materialBlue = std::make_shared<DefaultMaterial>();
+	materialBlue->Texture = ResourceManager::GetWhiteTexture();
+	materialBlue->DiffuseColor = { .25f, .1f, .95f };
+	materialBlue->AmbientColor = { .25f, .1f, .95f };
+	materialBlue->SpecularColor = { .25f, .1f, .95f };
+	materialBlue->Shininess = 50.0f;
+	ResourceManager::LoadMaterial(materialBlue, "Blue");
+
 	// create Meshes
 	const auto& meshCube1 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialTextured);
 	const auto& meshCube2 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialRed);
 	const auto& meshCube3 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialGrey);
-
+	const auto& meshCube4 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialBlue);
+	
 	//default mesh
 	mMeshes.push_back(std::make_shared <Mesh>());
 	mMeshes.push_back(meshCube1);
 	mMeshes.push_back(meshCube2);
 	mMeshes.push_back(meshCube3);
+	mMeshes.push_back(meshCube4);
 }
 void GameLayer::Enable()
 {

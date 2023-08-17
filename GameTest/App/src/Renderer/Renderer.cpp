@@ -107,21 +107,21 @@ void Renderer::flush()
 
 bool Renderer::RenderData::operator<(const RenderData& other)
 {
-	if (Material->GetShaderID() < other.Material->GetShaderID())
+	if (VertexArray->GetID() < other.VertexArray->GetID())
 		return true;
-	else if (Material->GetShaderID() > other.Material->GetShaderID())
+	else if (VertexArray->GetID() > other.VertexArray->GetID())
 		return false;
 	else
 	{
-		if (Material->GetMaterialID() < other.Material->GetMaterialID())
+		if (Material->GetShaderID() < other.Material->GetShaderID())
 			return true;
-		else if (Material->GetMaterialID() > other.Material->GetMaterialID())
+		else if (Material->GetShaderID() > other.Material->GetShaderID())
 			return false;
 		else
 		{
-			if (VertexArray->GetID() < other.VertexArray->GetID())
+			if (Material->GetMaterialID() < other.Material->GetMaterialID())
 				return true;
-			else if (VertexArray->GetID() > other.VertexArray->GetID())
+			else if (Material->GetMaterialID() > other.Material->GetMaterialID())
 				return false;
 		}
 	}
