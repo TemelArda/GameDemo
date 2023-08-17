@@ -116,7 +116,7 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 		}
 	}
 	//mShaderSource = ss[0].str() + '\n' + ss[1].str();
-
+	stream.close();
 	return {ss[0].str(), ss[1].str()};
 }
 

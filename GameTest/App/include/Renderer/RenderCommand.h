@@ -42,6 +42,16 @@ public:
 		mAPI->DisableDepthTest();
 	}
 
+	static inline void EnableBlend()
+	{
+		mAPI->EnableBlend();
+	}
+
+	static inline void DisableBlend()
+	{
+		mAPI->DisableBlend();
+	}
+
 private:
 	static IRendererAPI* mAPI;
 };

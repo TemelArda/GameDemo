@@ -16,5 +16,9 @@ public:
 	virtual void EnableDepthTest() override;
 
 	virtual void DisableDepthTest() override;
+
+	virtual void EnableBlend() override;
+
+	virtual void DisableBlend() override;
 };
 } // namespace Core_Renderer

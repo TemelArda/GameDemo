@@ -35,6 +35,7 @@ void Renderer::BeginScene(const std::weak_ptr<Core::Scene> scene) const
 	mSceneData->Time = scenePtr->GetElapsedTimeInSeconds();
 	
 	RenderCommand::EnableDepthTest();
+	RenderCommand::EnableBlend();
 }
 
 void Renderer::Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t )

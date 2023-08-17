@@ -1,7 +1,17 @@
 #include "stdafx.h"
 #include "../include/ResourceManager.h"
+#include "../include/Renderer/Constants.h"
+#include "../include/ModelLoader.h"
 #include <assert.h>
 #include <mutex>
+
+namespace
+{
+	constexpr auto CUBE_FILE_NAME{ "cube.obj" };
+	constexpr auto SPHERE_FILE_NAME{ "sphere.obj" };
+	constexpr auto MONKEY_FILE_NAME{ "monkey.obj" };
+
+} // namespace
 
 static float vertexDataCube[] = {
 	-0.5f, -0.5f, 0.0f, 0.0, 0.0, 1.0, 0.0, 0.0,// bot-left  front face
@@ -66,6 +76,22 @@ namespace Core
 void ResourceManager::Initilize()
 {
 	std::call_once(flag1, []() {
+		// Load default resources
+		auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(CUBE_FILE_NAME);
+		const auto& modelCube = LoadObj(fp);
+		if(modelCube.has_value())
+			mVertexArrays.insert(std::make_pair("Cube2", modelCube.value()));
+
+		fp = Core_Renderer::PATH_TO_MODELS + std::string(SPHERE_FILE_NAME);
+		const auto& modelSphere = LoadObj(fp);
+		if (modelSphere.has_value())
+			mVertexArrays.insert(std::make_pair("Sphere", modelSphere.value()));
+
+		fp = Core_Renderer::PATH_TO_MODELS + std::string(MONKEY_FILE_NAME);
+		const auto& modelMonkey = LoadObj(fp);
+		if (modelMonkey.has_value())
+			mVertexArrays.insert(std::make_pair("Monkey", modelMonkey.value()));
+
 		const auto& whiteTexture = std::make_shared<Core_Renderer::Texture>();
 		mTextures.insert(std::make_pair("White", whiteTexture));
 
@@ -184,6 +210,21 @@ const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetQuadVertex
 const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCubeVertexArray()
 {
 	return GetVertexArray("Cube");
+}
+
+const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCube2VertexArray()
+{
+	return GetVertexArray("Cube2");
+}
+
+const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetSphereVertexArray()
+{
+	return GetVertexArray("Sphere");
+}
+
+const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetMonkeyVertexArray()
+{
+	return GetVertexArray("Monkey");
 }
 
 std::shared_ptr<Material> ResourceManager::GetDefaultMaterial()

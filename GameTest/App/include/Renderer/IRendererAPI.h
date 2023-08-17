@@ -25,6 +25,10 @@ public:
 
 	virtual void PrintRenderAPI() = 0;
 
+	virtual void EnableBlend() = 0;
+
+	virtual void DisableBlend() = 0;
+
 private:
 
 };

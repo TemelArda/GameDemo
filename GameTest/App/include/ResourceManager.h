@@ -50,6 +50,12 @@ public:
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetCubeVertexArray();
 
+	static const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCube2VertexArray();
+
+	static const std::shared_ptr<Core_Renderer::VertexArray> GetSphereVertexArray();
+
+	static const std::shared_ptr<Core_Renderer::VertexArray> GetMonkeyVertexArray();
+
 	static std::shared_ptr<Material> GetDefaultMaterial();
 
 private:

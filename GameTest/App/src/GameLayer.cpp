@@ -46,7 +46,7 @@ void GameLayer::OnRender()
 	{
 		float x = (- i + (int)mMeshes.size() / 2) * 2;
 		transform.mPosition = { x , 0.0f, 0.0f };
-		transform.Rotate({mScene->GetElapsedTimeInMilliSeconds()/100 * PI/180, 0.0f, 0.0f});
+		transform.Rotate({0.0f, mScene->GetElapsedTimeInMilliSeconds() / 100 * PI / 180, 0.0f});
 		mRenderer->Submit(mMeshes[i], transform.GetModelMatrix());
 	}
 
@@ -65,6 +65,7 @@ void GameLayer::OnEvent(IEvent& e)
 
 	//Create Texture
 	const auto& texture = ResourceManager::LoadTexture("blue_eyes.bmp", "BlueEyes");
+	const auto& textureMonkey = ResourceManager::LoadTexture("monkeytexture.bmp", "MonkeyTex");
 
 	//Create Materials
 	const auto& materialTextured = std::make_shared<DefaultMaterial>();
@@ -99,10 +100,15 @@ void GameLayer::OnEvent(IEvent& e)
 	materialBlue->Shininess = 50.0f;
 	ResourceManager::LoadMaterial(materialBlue, "Blue");
 
+	const auto& materialMonkey = std::make_shared<DefaultMaterial>();
+	materialMonkey->Texture = textureMonkey;
+	materialMonkey->Shininess = 10.0f;
+	ResourceManager::LoadMaterial(materialMonkey, "MaterialMonkey");
+
 	// create Meshes
-	const auto& meshCube1 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialTextured);
-	const auto& meshCube2 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialRed);
-	const auto& meshCube3 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialGrey);
+	const auto& meshCube1 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCube2VertexArray(), materialTextured);
+	const auto& meshCube2 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetMonkeyVertexArray(), materialMonkey);
+	const auto& meshCube3 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCube2VertexArray(), materialRed);
 	const auto& meshCube4 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialBlue);
 	
 	//default mesh

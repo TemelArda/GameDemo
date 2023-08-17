@@ -212,6 +212,7 @@
     <ClInclude Include="App\include\Renderer\Constants.h" />
     <ClInclude Include="App\include\Renderer\IndexBuffer.h" />
     <ClInclude Include="App\include\Renderer\IRendererAPI.h" />
+    <ClInclude Include="App\include\ModelLoader.h" />
     <ClInclude Include="App\include\Renderer\OpenGLRendererAPI.h" />
     <ClInclude Include="App\include\Renderer\Renderer.h" />
     <ClInclude Include="App\include\Renderer\RenderCommand.h" />
@@ -243,6 +244,7 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\ModelLoader.cpp" />
     <ClCompile Include="App\src\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="App\src\GameLayer.cpp" />
     <ClCompile Include="App\src\LayerStack.cpp" />
