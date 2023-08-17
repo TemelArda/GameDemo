@@ -53,26 +53,4 @@ Mat4x4 lookAt(const Vector3& Peye, const Vector3& Pref, const Vector3& up) {
 		Vector4(0, 0, 0, 1)
 	);
 }
-
-Mat4x4 lookAt(Transform3D& t, const Vector3& Pref, const Vector3& up)
-{
-	Vector3 zaxis = (t.mPosition - Pref).GetNormalized();
-	Vector3 xaxis = Vector3::Cross(zaxis, up);
-	xaxis.Normalize();
-	Vector3 yaxis = Vector3::Cross(zaxis, xaxis);
-
-	const auto eyedotx = t.mPosition.Dot(xaxis);
-	const auto eyedoty = t.mPosition.Dot(yaxis);
-	const auto eyedotz = t.mPosition.Dot(zaxis);
-
-	t.mRotation = Quaternion::FromMatrix(Mat4x4(
-		Vector4(xaxis.x, xaxis.y, xaxis.z, -eyedotx),
-		Vector4(yaxis.x, yaxis.y, yaxis.z, -eyedoty),
-		Vector4(zaxis.x, zaxis.y, zaxis.z, -eyedotz),
-		Vector4(0, 0, 0, 1)));
-
-	t.mPosition = Vector3(-eyedotx, -eyedoty, -eyedotz);
-
-	return Mat4x4();
-}
 }

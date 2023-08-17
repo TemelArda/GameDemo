@@ -36,7 +36,7 @@ public:
 
 	void Rotate(const Core_Math::Vector3& rotation){ mTransform.Rotate(rotation); SetViewMatrix(); }
 
-	void LookAt(const Core_Math::Vector3& target){ Core_Math::LookAt(mTransform, target, {0, 1, 0}); SetViewMatrix(); }
+	void LookAt(const Core_Math::Vector3& target){ mTransform.LookAt(target, {0, 1, 0}); SetViewMatrix(); }
 
 private:
 	
