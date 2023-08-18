@@ -56,6 +56,8 @@ public:
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetMonkeyVertexArray();
 
+	static const std::shared_ptr<Core_Renderer::VertexArray> GetBalbVertexArray();
+
 	static std::shared_ptr<Material> GetDefaultMaterial();
 
 private:

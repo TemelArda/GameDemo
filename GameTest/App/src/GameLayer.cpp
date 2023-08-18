@@ -109,8 +109,8 @@ void GameLayer::OnEvent(IEvent& e)
 	const auto& meshCube1 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCube2VertexArray(), materialTextured);
 	const auto& meshCube2 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetMonkeyVertexArray(), materialMonkey);
 	const auto& meshCube3 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCube2VertexArray(), materialRed);
-	const auto& meshCube4 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialBlue);
-	
+	const auto& meshCube4 = std::make_shared<Mesh>(ResourceManager::GetInstance().GetCubeVertexArray(), materialTextured);
+
 	//default mesh
 	mMeshes.push_back(std::make_shared <Mesh>());
 	mMeshes.push_back(meshCube1);

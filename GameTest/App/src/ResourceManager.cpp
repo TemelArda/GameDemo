@@ -10,37 +10,37 @@ namespace
 	constexpr auto CUBE_FILE_NAME{ "cube.obj" };
 	constexpr auto SPHERE_FILE_NAME{ "sphere.obj" };
 	constexpr auto MONKEY_FILE_NAME{ "monkey.obj" };
-
+	constexpr auto BALB_FILE_NAME{ "balb.obj" };
 } // namespace
 
 static float vertexDataCube[] = {
-	-0.5f, -0.5f, 0.0f, 0.0, 0.0, 1.0, 0.0, 0.0,// bot-left  front face
-	 0.5f, -0.5f, 0.0f, 0.0, 0.0, 1.0, 1.0, 0.0,// bot-right front face
-	 0.5f,  0.5f, 0.0f, 0.0, 0.0, 1.0, 1.0, 1.0,// top-right  front face
-	 -0.5f, 0.5f, 0.0f, 0.0, 0.0, 1.0, 0.0, 1.0,// top-left front face
+	-0.5f, -0.5f, -0.5f, 0.0, 0.0, 1.0, 0.0, 0.0,// bot-left  front face
+	 0.5f, -0.5f, -0.5f, 0.0, 0.0, 1.0, 1.0, 0.0,// bot-right front face
+	 0.5f,  0.5f, -0.5f, 0.0, 0.0, 1.0, 1.0, 1.0,// top-right  front face
+	 -0.5f, 0.5f, -0.5f, 0.0, 0.0, 1.0, 0.0, 1.0,// top-left front face
 
-	 -0.5f, -0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  right face
+	 -0.5f, -0.5f, -0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  right face
 	 -0.5f, -0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// bot-right right face
 	 -0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  right face
-	 -0.5f, 0.5f, 0.0f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left right face
+	 -0.5f, 0.5f, -0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left right face
 
 	 -0.5f, -0.5f,  0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-left  back face
 	 0.5f, -0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-right back face
 	 0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-right  back face
 	 -0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-left back face
 
-	 0.5f, -0.5f, 0.0f, -1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  left face
+	 0.5f, -0.5f, -0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// bot-left  left face
 	 0.5f, -0.5f, 0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// bot-right left face
 	 0.5f, 0.5f, 0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// top-right  left face
-	 0.5f, 0.5f, 0.0f, -1.0, 0.0, 0.0, 0.0, 0.0,// top-left left face
+	 0.5f, 0.5f, -0.5f, -1.0, 0.0, 0.0, 0.0, 0.0,// top-left left face
 
-	 0.5f, 0.5f, 0.0f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-left  top face
-	 -0.5f, 0.5f, 0.0f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-right top face
+	 0.5f, 0.5f, -0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-left  top face
+	 -0.5f, 0.5f, -0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// bot-right top face
 	 -0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-right  top face
 	 0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-left top face
 
-		0.5f, -0.5f, 0.0f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-left  bot face
-	 -0.5f, -0.5f, 0.0f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-right bot face
+		0.5f, -0.5f, -0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-left  bot face
+	 -0.5f, -0.5f, -0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-right bot face
 	 -0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-right  bot face
 	 0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-left bot face
 };

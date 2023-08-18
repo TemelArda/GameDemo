@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include "Logger.h"
 
 namespace Core
 {
@@ -26,6 +27,7 @@ std::optional<std::shared_ptr<Core_Renderer::VertexArray>> LoadObj(const std::st
 	std::vector<uint32_t> indices;
 	std::vector<float> vertices;
 	uint32_t index = 0;
+
 	while (std::getline(stream, line))
 	{
 		std::stringstream ss(line);
@@ -61,8 +63,8 @@ std::optional<std::shared_ptr<Core_Renderer::VertexArray>> LoadObj(const std::st
 				
 				{
 					int pos_index = std::stoi(tokens[0]) - 1;
-					int tex_index = std::stoi(tokens[1]) - 1;
 					int norm_index = std::stoi(tokens[2]) - 1;
+					
 
 					vertices.push_back(positions[pos_index].x);
 					vertices.push_back(positions[pos_index].y);
@@ -70,8 +72,17 @@ std::optional<std::shared_ptr<Core_Renderer::VertexArray>> LoadObj(const std::st
 					vertices.push_back(normals[norm_index].x);
 					vertices.push_back(normals[norm_index].y);
 					vertices.push_back(normals[norm_index].z);
-					vertices.push_back(texCoords[tex_index].x);
-					vertices.push_back(texCoords[tex_index].y);
+					if (std::isdigit(tokens[1][0]) != 0)
+					{
+						int tex_index = std::stoi(tokens[1]) - 1;
+						vertices.push_back(texCoords[tex_index].x);
+						vertices.push_back(texCoords[tex_index].y);
+					}
+					else
+					{
+						vertices.push_back(0);
+						vertices.push_back(0);
+					}
 
 					indices.push_back(index++);
 				}
