@@ -15,15 +15,14 @@ class	Registry;
 
 namespace Core
 {
-
-class Camera;
-
-class Mesh;
+class MeshRendererSystem;
 
 class GameLayer: public Layer
 {
 public:
-	GameLayer(std::shared_ptr<Core_Renderer::Renderer>, std::shared_ptr<Core_ECS::Registry> reg);
+	GameLayer(std::shared_ptr<Core_Renderer::Renderer> renderer, 
+		std::shared_ptr<MeshRendererSystem> meshRenderer, 
+		std::shared_ptr<Core_ECS::Registry> reg);
 
 	virtual void OnAttach() override;
 	
@@ -49,10 +48,8 @@ private:
 
 	std::shared_ptr<Core_Renderer::Renderer> mRenderer;
 
+	std::shared_ptr<MeshRendererSystem> mMeshRenderer;
+
 	std::shared_ptr<Scene> mScene;
-
-	std::vector<std::shared_ptr<Mesh>> mMeshes;
-
-	std::shared_ptr<Camera> mCamera;
 };
 }

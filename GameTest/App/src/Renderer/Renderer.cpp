@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "../../include/Renderer/Renderer.h"
-#include "Logger.h"
 #include "../../include/Renderer/RenderCommand.h"
 #include "../../include/Scene.h"
 #include "../../include/Material.h"
 #include "../../include/Mesh.h"
 #include "../../include/Camera.h" 
+#include "../../include/Renderer/VertexArray.h"
+#include "Logger.h"
 
 
 namespace

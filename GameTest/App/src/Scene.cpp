@@ -2,8 +2,13 @@
 #include "../include/Scene.h"
 #include "../include/Components.h"
 #include "../include/Settings.h"
-#include "ECS.h"
 #include "../include/Camera.h"
+#include "../include/ResourceManager.h"
+#include "../include/Material.h"
+#include "../include/Mesh.h"
+#include "../include/CoreDefines.h"
+#include "Math/Transform3D.h"
+#include "ECS.h"
 
 namespace Core
 {
@@ -16,17 +21,14 @@ Scene::Scene(std::shared_ptr<Core_ECS::Registry> registery)
 void Scene::Initilize()
 {
 	mStartTime = std::chrono::high_resolution_clock::now();
+	LOG_INFO("Creating the new Scene...");
+	InitilizeResources();
 	InitilizeEntities();
 }
 
-void Scene::Update(float ts)
+void Scene::Shutdown()
 {
-
-}
-
-void Scene::Render()
-{
-
+	LOG_INFO("Scene Destroyed");
 }
 
 const float Scene::GetElapsedTimeInSeconds() const
@@ -45,33 +47,61 @@ const float Scene::GetElapsedTimeInMilliSeconds() const
 
 }
 
-void Scene::Shutdown()
-{
-	LOG_INFO("Scene Destroyed");
-}
-
-
-
 void Scene::InitilizeEntities()
 {
 	Core_ECS::Entity player = mRegistry->CreateEntity();
-	Transform2DComponent playerTransform(APP_INIT_WINDOW_WIDTH / 2, APP_INIT_WINDOW_HEIGHT / 2, .25, 0);
+	TransformComponent playerTransform;
+	mRegistry->AddComponent<TransformComponent>(player, playerTransform);
 
-	CircleRendererComponent cir;
-	cir.color = {.2f, .2f, .7f};
-	cir.radius = .5f;
-	cir.isFilled = TRUE;
+	MeshComponent playerMesh(
+		ResourceManager::GetInstance().GetMonkeyVertexArray(), 
+		ResourceManager::GetInstance().GetMaterial("MaterialMonkey")
+		);
+	mRegistry->AddComponent<MeshComponent>(player, playerMesh);
 
+}
+void Scene::InitilizeResources()
+{
+	//Create Texture
+	const auto& texture = ResourceManager::LoadTexture("blue_eyes.bmp", "BlueEyes");
+	const auto& textureMonkey = ResourceManager::LoadTexture("monkeytexture.bmp", "MonkeyTex");
 
-	RectangleRendererComponent rect;
-	rect.isFilled = false;
-	rect.lineWidth = 5.0f;
+	//Create Materials
+	const auto& materialTextured = std::make_shared<DefaultMaterial>();
+	materialTextured->Texture = texture;
+	materialTextured->DiffuseColor = { .85f, .85f, .85f };
+	materialTextured->AmbientColor = { .85f, .85f, .85f };
+	materialTextured->SpecularColor = { .85f, .85f, .85f };
+	materialTextured->Shininess = 1.0f;
+	ResourceManager::LoadMaterial(materialTextured, "BlueEyes");
 
-	MovementComponent mover;
+	const auto& materialRed = std::make_shared<DefaultMaterial>();
+	materialRed->Texture = texture;
+	materialRed->DiffuseColor = { .85f, .1f, .05f };
+	materialRed->AmbientColor = { .85f, .1f, .05f };
+	materialRed->SpecularColor = { .85f, .1f, .05f };
+	materialRed->Shininess = 10.0f;
+	ResourceManager::LoadMaterial(materialRed, "Red");
 
-	mRegistry->AddComponent<Transform2DComponent>(player, playerTransform);
-	mRegistry->AddComponent<CircleRendererComponent>(player, cir);
-	mRegistry->AddComponent<MovementComponent>(player, mover);
-	
+	const auto& materialGrey = std::make_shared<DefaultMaterial>();
+	materialGrey->Texture = ResourceManager::GetWhiteTexture();
+	materialGrey->DiffuseColor = { .5f, .5f, .5f };
+	materialGrey->AmbientColor = { .5f, .5f, .5f };
+	materialGrey->SpecularColor = { .5f, .5f, .5f };
+	materialGrey->Shininess = 30.0f;
+	ResourceManager::LoadMaterial(materialGrey, "grey");
+
+	const auto& materialBlue = std::make_shared<DefaultMaterial>();
+	materialBlue->Texture = ResourceManager::GetWhiteTexture();
+	materialBlue->DiffuseColor = { .25f, .1f, .95f };
+	materialBlue->AmbientColor = { .25f, .1f, .95f };
+	materialBlue->SpecularColor = { .25f, .1f, .95f };
+	materialBlue->Shininess = 50.0f;
+	ResourceManager::LoadMaterial(materialBlue, "Blue");
+
+	const auto& materialMonkey = std::make_shared<DefaultMaterial>();
+	materialMonkey->Texture = textureMonkey;
+	materialMonkey->Shininess = 10.0f;
+	ResourceManager::LoadMaterial(materialMonkey, "MaterialMonkey");
 }
 }// namespace Core 

@@ -2,88 +2,68 @@
 #include <string>
 #include "./Color.h"
 #include "./Math/Vector2.h"
+#include "./Math/Vector3.h"
+#include "./Math/Transform3D.h"
+#include "./Mesh.h"
+#include "./Renderer/Texture.h"
 
 namespace Core
 {
 
-struct MovementComponent
+struct TransformComponent
 {
-	Core_Math::numeral baseSpeed = 30.0f;
-	
-	Core_Math::Vector2 velocity; // Change to vector 
-
-	Core_Math::Vector2 acceleration; // Change to vector
-
+	Core_Math::Transform3D transform;
 };
 
-struct Transform2DComponent
+struct ColliderComponent
 {
-	Transform2DComponent()
-		: scale(1.0f), rotation(0.0f)
+	bool isTrigger = false;
+
+	bool isStatic = false;
+};
+
+
+struct RigidBodyComponent
+{
+	float mass = 1.0f;
+	
+	float drag = 0.0f;
+	
+	float angularDrag = 0.0f;
+	
+	bool useGravity = true;
+	
+	Core_Math::Vector3 velocity{0, 0, 0};
+	
+	Core_Math::Vector3 angularVelocity{0, 0, 0};
+	
+	Core_Math::Vector3 centerOfMass{0, 0, 0};
+};
+
+struct MeshComponent
+{
+	MeshComponent(std::shared_ptr<Core_Renderer::VertexArray> vertexArray, 
+		std::shared_ptr<Material> material)
 	{
-		
+		mesh = std::make_shared<Mesh>(vertexArray, material);
+	}
+	
+	MeshComponent(std::shared_ptr<Mesh> mesh)
+		: mesh(mesh)
+	{
 	}
 
-	Transform2DComponent(float x, float y, float scale, float rotation)
-		: scale(scale), rotation(rotation)
+	MeshComponent()
 	{
-		position.x = x;
-		position.y = y;
+		mesh = std::make_shared<Mesh>();
 	}
-		
-	Core_Math::Vector2 position;
-	
-	Core_Math::numeral  scale;
 
-	Core_Math::numeral  rotation;
-};
-
-struct ShapeRendererComponent
-{
-	Core::Color color;
-
-	bool isFilled = false;
-
-	float lineWidth = 1.0f;
-};
-
-
-struct CircleRendererComponent : public ShapeRendererComponent
-{
-	
-	float radius = 1.0f;
-
-	float offSetx = 0.0f;
-
-	Core_Math::Vector2 offSet;
-};
-
-struct RectangleRendererComponent : public ShapeRendererComponent
-{
-	float width = 5;
-
-	float height = 2.5;
-
-	Core_Math::Vector2 offSet;
-};
-
-struct LineRendererComponent : public ShapeRendererComponent
-{
-	Core_Math::Vector2 p1;
-
-	Core_Math::Vector2 p2;
-};
-
-struct TriangleRendererComponent : public ShapeRendererComponent
-{
-	Core_Math::Vector2 offSet;
-
-	float height;
+	std::shared_ptr<Mesh> mesh;
 };
 
 struct SpriteRendererComponent
 {
-	std::string textureName;
+	Core_Renderer::Texture textrue;
 };
 
 struct Tag 

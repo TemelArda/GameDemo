@@ -27,9 +27,9 @@ void Registry::DestroyEntity(Entity entity)
 	mSystemManager->EntityDestroyed(entity);
 }
 
-void Registry::RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs)
+const SystemID Registry::RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs)
 {
 	system->SetComponentManager(mComponentManager.get());
-	mSystemManager->RegisterSystem(system, componentIDs);
+	return mSystemManager->RegisterSystem(system, componentIDs);
 }
 }// namespace Core_ECS

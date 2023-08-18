@@ -34,7 +34,9 @@ public:
 
 	void DestroyEntity(Entity entity);
 
-	void RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs);
+	const SystemID RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs);
+
+	std::shared_ptr<ISystem> GetSystem(SystemID system){return mSystemManager->GetSystem(system); }
 
 	void Initilize();
 

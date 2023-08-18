@@ -7,11 +7,12 @@ SystemManager::~SystemManager()
 	  mSystems.clear();
 }
 
-void SystemManager::RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs)
+const SystemID SystemManager::RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs)
 {
 	system->SetID(mNextSystemID);
 	system->SetRequiredComponents(componentIDs);
 	mSystems[mNextSystemID++] = system;
+	return mNextSystemID - 1;
 }
 
 void SystemManager::EntityDestroyed(Entity entity)

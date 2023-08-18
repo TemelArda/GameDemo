@@ -30,10 +30,6 @@ public:
 
 	void Initilize();
 
-	void Update(float ts);
-
-	void Render();
-
 	void Shutdown();
 
 	std::shared_ptr<Core_ECS::Registry> GetRegistry() const { return mRegistry; }
@@ -54,7 +50,10 @@ private:
 
 	std::chrono::steady_clock::time_point mStartTime;
 
+	void InitilizeResources();
+	
 	void InitilizeEntities();
+
 };
 
 } // namespace Core

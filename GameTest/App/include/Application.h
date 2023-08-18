@@ -1,7 +1,9 @@
 #pragma once
 #include <memory>
+#include <unordered_map>
 #include "Event/Dispatcher.h"
 #include "LayerStack.h"
+
 
 namespace Core_ECS
 {
@@ -17,7 +19,7 @@ namespace Core
 {
 class Application
 {
-
+using RegisteredSystems = std::unordered_map<std::string, uint32_t>;
 public:
 	static Application& GetInstance()
 	{
@@ -44,6 +46,8 @@ public:
 private:
 	
 	LayerStack mLayerStack;
+
+	RegisteredSystems mRegisteredSystems;
 
 	std::shared_ptr<Core_Renderer::Renderer> mRenderer;
 

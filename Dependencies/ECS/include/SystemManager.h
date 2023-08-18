@@ -13,7 +13,7 @@ public:
 	
 	~SystemManager();
 
-	void RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs);
+	const SystemID RegisterSystem(std::shared_ptr<ISystem> system, std::initializer_list<ComponentID> componentIDs);
 
 	void EntityDestroyed(Entity entity);
 

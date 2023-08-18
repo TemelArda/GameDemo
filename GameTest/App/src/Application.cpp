@@ -4,6 +4,8 @@
 #include "../include/Renderer/Renderer.h"
 #include "../include/GameLayer.h"
 #include "../include/Components.h"
+#include "../include/System/MeshRendererSystem.h"
+#include "../include/ResourceManager.h"
 #include "ECS.h"
 
 namespace Core
@@ -17,15 +19,25 @@ void Application::Initilize()
 	if (!mRegistry)
 		mRegistry = std::make_shared<Core_ECS::Registry>();
 	
-
+	ResourceManager::GetInstance().Initilize();
 	mRenderer->PrintRenderAPI();
 	
 	mRegistry->Initilize();
+	
 	RegisterComponents();
-	RegisterSystems();
+	/// Registering Systems
+	const auto& transformId = mRegistry->GetComponentTypeId<TransformComponent>();
+	const auto& meshId = mRegistry->GetComponentTypeId<MeshComponent>();
+	const auto meshRendererSystem = std::make_shared<MeshRendererSystem>(mRenderer);
+	mRegisteredSystems.insert(std::make_pair("MeshRenderSystem", mRegistry->RegisterSystem(meshRendererSystem, { transformId, meshId })));
+	/// End of Registering Systems
+
 
 	// Initilize the layer stack with the game layer
-	const auto gameLayer = std::make_shared<GameLayer>(mRenderer, mRegistry);
+	const auto gameLayer = std::make_shared<GameLayer>(
+		mRenderer,
+		meshRendererSystem,
+		mRegistry);
 	PushLayer(gameLayer);
 
 	//Dispatcher workflow Example
@@ -75,16 +87,16 @@ void Application::PopOverlay(std::shared_ptr<Layer> overlay)
 
 void Application::RegisterComponents()
 {
-	mRegistry->RegisterComponentType<Transform2DComponent>();
-	mRegistry->RegisterComponentType<CircleRendererComponent>();
-	mRegistry->RegisterComponentType<RectangleRendererComponent>();
-	mRegistry->RegisterComponentType<LineRendererComponent>();
-	mRegistry->RegisterComponentType<MovementComponent>();
+	mRegistry->RegisterComponentType<TransformComponent>();;
+	mRegistry->RegisterComponentType<MeshComponent>();
+	mRegistry->RegisterComponentType<SpriteRendererComponent>();
+	mRegistry->RegisterComponentType<RigidBodyComponent>();
+	mRegistry->RegisterComponentType<ColliderComponent>();
 }
 
 void Application::RegisterSystems()
 {
-
+	
 }
 
 } // namespace Core

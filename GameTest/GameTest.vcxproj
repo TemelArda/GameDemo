@@ -224,19 +224,16 @@
     <ClInclude Include="App\include\Material.h" />
     <ClInclude Include="App\include\Mesh.h" />
     <ClInclude Include="App\include\ResourceManager.h" />
-    <ClInclude Include="App\Systems\include\CircleRenderSystem.h" />
     <ClInclude Include="App\include\Components.h" />
     <ClInclude Include="App\include\CoreDefines.h" />
     <ClInclude Include="App\include\Scene.h" />
     <ClInclude Include="App\include\Settings.h" />
+    <ClInclude Include="App\include\System\MeshRendererSystem.h" />
     <ClInclude Include="App\main.h" />
     <ClInclude Include="App\mydirectsound.h" />
     <ClInclude Include="App\SimpleController.h" />
     <ClInclude Include="App\SimpleSound.h" />
     <ClInclude Include="App\SimpleSprite.h" />
-    <ClInclude Include="App\Systems\include\ControllerMovementSystem.h" />
-    <ClInclude Include="App\Systems\include\LineRenderSystem.h" />
-    <ClInclude Include="App\Systems\include\RenderSystemConstants.h" />
     <ClInclude Include="App\TextureLoader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -244,6 +241,7 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\System\MeshRendererSystem.cpp" />
     <ClCompile Include="App\src\ModelLoader.cpp" />
     <ClCompile Include="App\src\Renderer\UniformBuffer.cpp" />
     <ClCompile Include="App\src\GameLayer.cpp" />
@@ -268,9 +266,6 @@
     <ClCompile Include="App\src\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="App\src\ResourceManager.cpp" />
     <ClCompile Include="App\src\Scene.cpp" />
-    <ClCompile Include="App\Systems\src\CircleRenderSystem.cpp" />
-    <ClCompile Include="App\Systems\src\ControllerMovementSystem.cpp" />
-    <ClCompile Include="App\Systems\src\LineRenderSystem.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="stdafx.cpp">

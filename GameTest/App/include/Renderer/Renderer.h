@@ -1,8 +1,7 @@
 #pragma once
-#include "VertexArray.h"
-#include "Math/Mat4x4.h"
-#include "Math/Vector3.h"
 #include <list>
+#include "Math/Mat4x4.h"
+
 
 namespace Core
 {
@@ -15,6 +14,8 @@ namespace Core
 
 namespace Core_Renderer
 {
+
+class VertexArray;
 
 class Renderer
 {
