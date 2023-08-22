@@ -51,14 +51,21 @@ void Scene::InitilizeEntities()
 {
 	Core_ECS::Entity player = mRegistry->CreateEntity();
 	TransformComponent playerTransform;
+	playerTransform.transform.Translate({ 0.0f, 10.0f, 0.0f });
 	mRegistry->AddComponent<TransformComponent>(player, playerTransform);
+	
 
 	MeshComponent playerMesh(
-		ResourceManager::GetInstance().GetMonkeyVertexArray(), 
-		ResourceManager::GetInstance().GetMaterial("MaterialMonkey")
+		ResourceManager::GetInstance().GetCube2VertexArray(), 
+		ResourceManager::GetInstance().GetMaterial("BlueEyes")
 		);
 	mRegistry->AddComponent<MeshComponent>(player, playerMesh);
 
+	RigidBodyComponent playerRigidBody;
+	playerRigidBody.Mass = 1.0f;
+	playerRigidBody.Drag = 1.0f;
+	//playerRigidBody.UseGravity = false;
+	mRegistry->AddComponent<RigidBodyComponent>(player, playerRigidBody);
 }
 void Scene::InitilizeResources()
 {

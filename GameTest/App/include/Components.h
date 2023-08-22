@@ -25,19 +25,23 @@ struct ColliderComponent
 
 struct RigidBodyComponent
 {
-	float mass = 1.0f;
+	float Mass = 1.0f;
 	
-	float drag = 0.0f;
+	float Drag = 0.0f;
 	
-	float angularDrag = 0.0f;
+	float AngularDrag = 0.0f;
 	
-	bool useGravity = true;
+	bool UseGravity = true;
+
+	bool IsKinematic = false;
 	
-	Core_Math::Vector3 velocity{0, 0, 0};
+	Core_Math::Vector3 Velocity{0, 0, 0};
 	
-	Core_Math::Vector3 angularVelocity{0, 0, 0};
+	Core_Math::Vector3 AngularVelocity{0, 0, 0};
+
+	Core_Math::Vector3 Acceleration{0, 0, 0};
 	
-	Core_Math::Vector3 centerOfMass{0, 0, 0};
+	Core_Math::Vector3 CenterOfMass{0, 0, 0};
 };
 
 struct MeshComponent

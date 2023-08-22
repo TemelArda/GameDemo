@@ -229,6 +229,7 @@
     <ClInclude Include="App\include\Scene.h" />
     <ClInclude Include="App\include\Settings.h" />
     <ClInclude Include="App\include\System\MeshRendererSystem.h" />
+    <ClInclude Include="App\include\System\PhysicsWorld.h" />
     <ClInclude Include="App\main.h" />
     <ClInclude Include="App\mydirectsound.h" />
     <ClInclude Include="App\SimpleController.h" />
@@ -241,6 +242,7 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\src\System\PhysicsWorld.cpp" />
     <ClCompile Include="App\src\System\MeshRendererSystem.cpp" />
     <ClCompile Include="App\src\ModelLoader.cpp" />
     <ClCompile Include="App\src\Renderer\UniformBuffer.cpp" />

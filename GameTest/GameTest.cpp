@@ -51,7 +51,7 @@ void Init()
 //------------------------------------------------------------------------
 void Update(float deltaTime)
 {
-	Core::Application::GetInstance().Update(deltaTime / (float) 1000);
+	Core::Application::GetInstance().Update(deltaTime);
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
 	testSprite->Update(deltaTime);

@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\CollisionDetection\AABB.h" />
     <ClInclude Include="include\Math\Mat4x4.h" />
     <ClInclude Include="include\Math\MathCommon.h" />
     <ClInclude Include="include\Math\MathUtils.h" />
@@ -140,8 +141,10 @@
     <ClInclude Include="include\Math\Vector3.h" />
     <ClInclude Include="include\Math\Vector4.h" />
     <ClInclude Include="include\Math\Transform3D.h" />
+    <ClInclude Include="include\CollisionDetection\AABBTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollisionDetection\AABB.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="include\Physics.h" />

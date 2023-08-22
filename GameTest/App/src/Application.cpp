@@ -5,6 +5,7 @@
 #include "../include/GameLayer.h"
 #include "../include/Components.h"
 #include "../include/System/MeshRendererSystem.h"
+#include "../include/System/PhysicsWorld.h"
 #include "../include/ResourceManager.h"
 #include "ECS.h"
 
@@ -28,8 +29,13 @@ void Application::Initilize()
 	/// Registering Systems
 	const auto& transformId = mRegistry->GetComponentTypeId<TransformComponent>();
 	const auto& meshId = mRegistry->GetComponentTypeId<MeshComponent>();
+	const auto& rigidBodyId = mRegistry->GetComponentTypeId<RigidBodyComponent>();
+	
 	const auto meshRendererSystem = std::make_shared<MeshRendererSystem>(mRenderer);
 	mRegisteredSystems.insert(std::make_pair("MeshRenderSystem", mRegistry->RegisterSystem(meshRendererSystem, { transformId, meshId })));
+	
+	const auto physicsWorld = std::make_shared<PhysicsWorld>();
+	mRegisteredSystems.insert(std::make_pair("PhysicsWorld", mRegistry->RegisterSystem(physicsWorld, { transformId, rigidBodyId })));
 	/// End of Registering Systems
 
 
@@ -37,6 +43,7 @@ void Application::Initilize()
 	const auto gameLayer = std::make_shared<GameLayer>(
 		mRenderer,
 		meshRendererSystem,
+		physicsWorld,
 		mRegistry);
 	PushLayer(gameLayer);
 
@@ -47,7 +54,7 @@ void Application::Initilize()
 void Application::Update(float ts)
 {
 	for (auto& layer : mLayerStack)
-		layer->OnUpdate(ts);
+		layer->OnUpdate(ts  / (float) 1000);
 }
 void Application::Render()
 {

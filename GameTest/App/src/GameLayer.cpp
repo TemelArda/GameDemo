@@ -2,15 +2,17 @@
 #include "../include/GameLayer.h"
 #include "../include/Renderer/Renderer.h"
 #include "../include/System/MeshRendererSystem.h"
+#include "../include/System/PhysicsWorld.h"
 
 namespace Core
 {
 GameLayer::GameLayer(std::shared_ptr<Core_Renderer::Renderer> renderer,
-	std::shared_ptr<MeshRendererSystem> meshRenderer, 
-	std::shared_ptr<Core_ECS::Registry> reg
-	)	: 
+	std::shared_ptr<MeshRendererSystem> meshRenderer,
+	std::shared_ptr<PhysicsWorld> physicsWorld,
+	std::shared_ptr<Core_ECS::Registry> reg)	:
 	Layer("GameLayer"), 
 	mMeshRenderer(meshRenderer),
+	mPhysicsWorld(physicsWorld),
 	mRenderer(renderer),
 	mIsEnabled(true)
 {
@@ -31,6 +33,7 @@ void GameLayer::OnUpdate(float ts)
 {
 	if(!mIsEnabled)
 		return;
+	mPhysicsWorld->Update(ts);
 }
 
 void GameLayer::OnRender()

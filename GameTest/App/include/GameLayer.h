@@ -16,12 +16,14 @@ class	Registry;
 namespace Core
 {
 class MeshRendererSystem;
+class PhysicsWorld;	
 
 class GameLayer: public Layer
 {
 public:
 	GameLayer(std::shared_ptr<Core_Renderer::Renderer> renderer, 
 		std::shared_ptr<MeshRendererSystem> meshRenderer, 
+		std::shared_ptr<PhysicsWorld> physicsWorld,
 		std::shared_ptr<Core_ECS::Registry> reg);
 
 	virtual void OnAttach() override;
@@ -49,6 +51,8 @@ private:
 	std::shared_ptr<Core_Renderer::Renderer> mRenderer;
 
 	std::shared_ptr<MeshRendererSystem> mMeshRenderer;
+
+	std::shared_ptr<PhysicsWorld> mPhysicsWorld;
 
 	std::shared_ptr<Scene> mScene;
 };

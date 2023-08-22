@@ -4,6 +4,7 @@
 #include <math.h>
 #include <assert.h>
 #include <utility>
+#include <string>
 
 namespace Core_Math
 {
@@ -63,6 +64,10 @@ public:
 
 	bool IsFinite() const;
 
+	const std::string toString() const;
+
+// -------------------- Operators -------------------- //
+
 	bool operator==(const Vector3& vector) const;
 
 	bool operator!=(const Vector3& vector) const;
@@ -95,6 +100,10 @@ public:
 	friend Vector3 operator/(const Vector3& vector1, const Vector3& vector2);
 
 	static Vector3 Cross(const Vector3& vector1, const Vector3& vector2);
+
+	static Vector3 Max(const Vector3& vector1, const Vector3& vector2);
+
+	static Vector3 Min(const Vector3& vector1, const Vector3& vector2);
 };
 
 inline Vector3::Vector3() noexcept
