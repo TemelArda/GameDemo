@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "../include/ResourceManager.h"
 #include "../include/Renderer/Constants.h"
+#include "../include/Materials/DefaultMaterial.h"
 #include "../include/ModelLoader.h"
 #include <assert.h>
 #include <mutex>
@@ -77,20 +78,6 @@ void ResourceManager::Initilize()
 {
 	std::call_once(flag1, []() {
 		// Load default resources
-		auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(CUBE_FILE_NAME);
-		const auto& modelCube = LoadObj(fp);
-		if(modelCube.has_value())
-			mVertexArrays.insert(std::make_pair("Cube2", modelCube.value()));
-
-		fp = Core_Renderer::PATH_TO_MODELS + std::string(SPHERE_FILE_NAME);
-		const auto& modelSphere = LoadObj(fp);
-		if (modelSphere.has_value())
-			mVertexArrays.insert(std::make_pair("Sphere", modelSphere.value()));
-
-		fp = Core_Renderer::PATH_TO_MODELS + std::string(MONKEY_FILE_NAME);
-		const auto& modelMonkey = LoadObj(fp);
-		if (modelMonkey.has_value())
-			mVertexArrays.insert(std::make_pair("Monkey", modelMonkey.value()));
 
 		const auto& whiteTexture = std::make_shared<Core_Renderer::Texture>();
 		mTextures.insert(std::make_pair("White", whiteTexture));
@@ -101,7 +88,6 @@ void ResourceManager::Initilize()
 		const auto& defaultMaterial = std::make_shared<DefaultMaterial>();
 		mMaterials.insert(std::make_pair("Default", defaultMaterial));
 
-		const auto& cubeVertexArray = std::make_shared<Core_Renderer::VertexArray>();
 		auto IboCube = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 36);
 		auto VboCube = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 24 * 8 * sizeof(float), 24);
 
@@ -114,11 +100,6 @@ void ResourceManager::Initilize()
 			VboCube->SetLayout(layout);
 		}
 
-		cubeVertexArray->AddVertexBuffer(VboCube);
-		cubeVertexArray->SetIndexBuffer(IboCube);
-		mVertexArrays.insert(std::make_pair("Cube", cubeVertexArray));
-
-		const auto& quadVertexArray = std::make_shared<Core_Renderer::VertexArray>();
 		auto IboQuad = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 6); //Only taking the front face of the cube
 		auto VboQuad = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 4 * 8 * sizeof(float), 4);
 
@@ -130,10 +111,17 @@ void ResourceManager::Initilize()
 			};
 			VboQuad->SetLayout(layout);
 		}
+		
+		LoadVertexArray(VboCube, IboCube, "Cube");
+		
+		LoadVertexArray(VboQuad, IboQuad, "Quad");
 
-		quadVertexArray->AddVertexBuffer(VboQuad);
-		quadVertexArray->SetIndexBuffer(IboQuad);
-		mVertexArrays.insert(std::make_pair("Quad", quadVertexArray));
+		LoadVertexArray(CUBE_FILE_NAME, "Cube2");
+
+		LoadVertexArray(SPHERE_FILE_NAME, "Sphere");
+
+		LoadVertexArray(MONKEY_FILE_NAME, "Monkey");
+
 	});
 }
 void ResourceManager::Shutdown()
@@ -153,6 +141,16 @@ std::shared_ptr<Core_Renderer::Shader> ResourceManager::LoadShader(const std::st
 	return shader;
 }
 
+std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::LoadVertexArray(const std::string& filename, const std::string& name)
+{
+	auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(CUBE_FILE_NAME);
+	const auto& modelCube = LoadObj(fp);
+	if (!modelCube.has_value())
+		return nullptr;
+	mVertexArrays.insert(std::make_pair(name, modelCube.value()));
+	return modelCube.value();
+}
+
 std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::LoadVertexArray(const std::shared_ptr<Core_Renderer::VertexBuffer>& vb,
 	const std::shared_ptr<Core_Renderer::IndexBuffer>& ib, const std::string& name)
 {
@@ -169,27 +167,27 @@ void ResourceManager::LoadMaterial(const std::shared_ptr<Material> mat, const st
 }
 inline std::shared_ptr<Core_Renderer::Texture> ResourceManager::GetTexture(const std::string& name)
 {
-	if(mTextures.find(name) != mTextures.end())
-		return mTextures.at(name);
-	assert(false);
+	if(mTextures.find(name) == mTextures.end())
+		assert(false);
+	return mTextures.at(name);
 }
 inline std::shared_ptr<Core_Renderer::Shader> ResourceManager::GetShader(const std::string& name)
 {
-	if (mShaders.find(name) != mShaders.end())
-		return mShaders.at(name);
-	assert(false);
+	if (mShaders.find(name) == mShaders.end())
+		assert(false);
+	return mShaders.at(name);
 }
 inline std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetVertexArray(const std::string& name)
 {
-	if (mVertexArrays.find(name) != mVertexArrays.end())
-		return mVertexArrays.at(name);
-	assert(false);
+	if (mVertexArrays.find(name) == mVertexArrays.end())
+		assert(false);
+	return mVertexArrays.at(name);
 }
 inline std::shared_ptr<Material> ResourceManager::GetMaterial(const std::string& name)
 {
-	if (mMaterials.find(name) != mMaterials.end())
-		return mMaterials.at(name);
-	assert(false);
+	if (mMaterials.find(name) == mMaterials.end())
+		assert(false);
+	return mMaterials.at(name);
 }
 
 std::shared_ptr<Core_Renderer::Texture> ResourceManager::GetWhiteTexture()

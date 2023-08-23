@@ -4,7 +4,7 @@
 #include "../include/Settings.h"
 #include "../include/Camera.h"
 #include "../include/ResourceManager.h"
-#include "../include/Material.h"
+#include "../include/Materials/DefaultMaterial.h"
 #include "../include/Mesh.h"
 #include "../include/CoreDefines.h"
 #include "Math/Transform3D.h"

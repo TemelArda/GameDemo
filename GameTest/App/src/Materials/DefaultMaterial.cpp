@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "../include/Material.h"
-#include "../include/ResourceManager.h"
+#include "../../include/Materials/Material.h"
+#include "../../include/Materials/DefaultMaterial.h"
+#include "../../include/ResourceManager.h"
 
 namespace Core
 {

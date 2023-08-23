@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "Event/Event.h"
+#include "../Event/Event.h"
 
 namespace Core
 {

@@ -2,10 +2,11 @@
 #include "../../include/Renderer/Renderer.h"
 #include "../../include/Renderer/RenderCommand.h"
 #include "../../include/Scene.h"
-#include "../../include/Material.h"
+#include "../../include/Materials/Material.h"
 #include "../../include/Mesh.h"
 #include "../../include/Camera.h" 
 #include "../../include/Renderer/VertexArray.h"
+#include "../../include//Renderer/Shader.h"
 #include "Logger.h"
 
 
@@ -39,7 +40,7 @@ void Renderer::BeginScene(const std::weak_ptr<Core::Scene> scene) const
 	RenderCommand::EnableBlend();
 }
 
-void Renderer::Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t )
+void Renderer::Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t)
 {
 	const auto meshPtr = mesh.lock();
 	if (!meshPtr)
@@ -50,18 +51,18 @@ void Renderer::Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat
 	const auto vao = meshPtr->GetVertexArray();
 	const auto material = meshPtr->GetMaterial();
 
-
-
 	mRenderSequence.push_back({ vao, material, t });
 }
+
+void Renderer::SubmitAABBObject(Core_Math::Mat4x4&& t)
+{
+	mAABBObjectTransform.emplace_back(std::move(t));
+}
+
 void Renderer::EndScene()
 {
 	flush();	
-}
-
-void Renderer::PrintRenderAPI()
-{
-	RenderCommand::PrintRenderAPI();
+	flushAABBObjects();
 }
 
 void Renderer::flush()
@@ -107,8 +108,42 @@ void Renderer::flush()
 	}
 }
 
-bool Renderer::RenderData::operator<(const RenderData& other)
+void Renderer::flushAABBObjects()
 {
+	if (mAABBObjectTransform.empty() || !mAABBMesh)
+		return;
+	const auto& shader = mAABBMesh->GetMaterial()->GetShader();
+	const auto& vao = mAABBMesh->GetVertexArray();
+
+	shader->Bind();
+	shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
+	vao->Bind();
+	vao->GetIndexBuffer()->Bind();
+	
+	while(!mAABBObjectTransform.empty())
+	{
+		const auto& transform = mAABBObjectTransform.front();
+
+		shader->SetUniformMat4f("u_Transform", transform);
+		RenderCommand::DrawIndexed(vao);
+		mRenderSequence.pop_front();
+	}
+
+	shader->Unbind();
+	vao->Unbind();
+	vao->GetIndexBuffer()->Unbind();
+}
+
+
+void Renderer::PrintRenderAPI()
+{
+	RenderCommand::PrintRenderAPI();
+}
+
+bool Renderer::SceneObject::operator<(const SceneObject& other)
+{
+
+	
 	if (VertexArray->GetID() < other.VertexArray->GetID())
 		return true;
 	else if (VertexArray->GetID() > other.VertexArray->GetID())

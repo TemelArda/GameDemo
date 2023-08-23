@@ -77,5 +77,8 @@
     <ClCompile Include="src\CollisionDetection\AABB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\CollisionDetection\AABBTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

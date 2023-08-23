@@ -95,8 +95,8 @@ Component& ComponentContainer<Component>::GetComponent(Entity entity)
 	uint32_t index = mEntityToIndex[entity];
 	if (index == MAX_UINT32)
 	{
-		LOG_WARNING("Entity {} don't have a component {}", entity, typeid(Component).name());
-		return Component();
+		LOG_WARNING("CAN'T GET COMPONENT!\n Entity {} don't have a component {}", entity, typeid(Component).name());
+		assert(false);
 	}
 	return mComponentContainer[index];
 }

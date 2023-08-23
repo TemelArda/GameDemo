@@ -198,7 +198,8 @@
   <ItemGroup>
     <ClInclude Include="App\app.h" />
     <ClInclude Include="App\DirectSound.h" />
-    <ClInclude Include="App\include\GameLayer.h" />
+    <ClInclude Include="App\include\Layers\DebugLayer.h" />
+    <ClInclude Include="App\include\Layers\GameLayer.h" />
     <ClInclude Include="App\include\Camera.h" />
     <ClInclude Include="App\include\Event\Dispatcher.h" />
     <ClInclude Include="App\include\Event\Event.h" />
@@ -206,8 +207,10 @@
     <ClInclude Include="App\include\Event\KeyEvent.h" />
     <ClInclude Include="App\include\Application.h" />
     <ClInclude Include="App\include\Color.h" />
-    <ClInclude Include="App\include\Layer.h" />
-    <ClInclude Include="App\include\LayerStack.h" />
+    <ClInclude Include="App\include\Layers\Layer.h" />
+    <ClInclude Include="App\include\Layers\LayerStack.h" />
+    <ClInclude Include="App\include\Materials\DebugMaterial.h" />
+    <ClInclude Include="App\include\Materials\DefaultMaterial.h" />
     <ClInclude Include="App\include\Renderer\BufferLayout.h" />
     <ClInclude Include="App\include\Renderer\Constants.h" />
     <ClInclude Include="App\include\Renderer\IndexBuffer.h" />
@@ -221,7 +224,7 @@
     <ClInclude Include="App\include\Renderer\VertexArray.h" />
     <ClInclude Include="App\include\Renderer\VertexBuffer.h" />
     <ClInclude Include="App\include\Renderer\Texture.h" />
-    <ClInclude Include="App\include\Material.h" />
+    <ClInclude Include="App\include\Materials\Material.h" />
     <ClInclude Include="App\include\Mesh.h" />
     <ClInclude Include="App\include\ResourceManager.h" />
     <ClInclude Include="App\include\Components.h" />
@@ -242,13 +245,15 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
+    <ClCompile Include="App\include\Materials\DebugMaterial.cpp" />
+    <ClCompile Include="App\src\Layers\DebugLayer.cpp" />
     <ClCompile Include="App\src\System\PhysicsWorld.cpp" />
     <ClCompile Include="App\src\System\MeshRendererSystem.cpp" />
     <ClCompile Include="App\src\ModelLoader.cpp" />
     <ClCompile Include="App\src\Renderer\UniformBuffer.cpp" />
-    <ClCompile Include="App\src\GameLayer.cpp" />
-    <ClCompile Include="App\src\LayerStack.cpp" />
-    <ClCompile Include="App\src\Material.cpp" />
+    <ClCompile Include="App\src\Layers\GameLayer.cpp" />
+    <ClCompile Include="App\src\Layers\LayerStack.cpp" />
+    <ClCompile Include="App\src\Materials\DefaultMaterial.cpp" />
     <ClCompile Include="App\src\Mesh.cpp" />
     <ClCompile Include="App\src\Camera.cpp" />
     <ClCompile Include="App\src\Renderer\OpenGLRendererAPI.cpp" />

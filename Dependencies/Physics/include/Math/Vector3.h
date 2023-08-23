@@ -142,7 +142,7 @@ inline void Vector3::SetToZero() noexcept
 
 inline const numeral Core_Math::Vector3::Magnitude() const
 {
-	return sqrt(x * x + y * y + z * z);
+	return sqrtf(x * x + y * y + z * z);
 }
 
 inline const numeral Core_Math::Vector3::MagnitudeSquared() const

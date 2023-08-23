@@ -132,7 +132,7 @@ inline void Vector2::SetToZero() noexcept
 
 inline const numeral Core_Math::Vector2::Magnitude() const
 {
-	return sqrt(x * x + y * y);
+	return sqrtf(x * x + y * y);
 }
 
 inline const numeral Core_Math::Vector2::MagnitudeSquared() const

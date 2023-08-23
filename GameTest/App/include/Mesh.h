@@ -1,6 +1,6 @@
 #pragma once
 #include "Renderer/VertexArray.h"
-#include "Material.h"
+#include "Materials/Material.h"
 
 namespace Core
 {

@@ -36,7 +36,6 @@ public:
 
 	void UpdateObject(EntityID entityId, const AABB& aabb);
 
-
 private:
 
 	std::vector<AABBNode> mNodes;
@@ -46,9 +45,6 @@ private:
 	NodeIndex mRoot;
 	
 	uint32_t mNodeCount;
-	
-	uint32_t mNodeCapacity;
-	
-	uint32_t mFreeList;
+
 };
 }

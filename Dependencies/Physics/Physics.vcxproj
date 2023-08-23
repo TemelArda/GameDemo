@@ -144,6 +144,7 @@
     <ClInclude Include="include\CollisionDetection\AABBTree.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\CollisionDetection\AABBTree.cpp" />
     <ClCompile Include="src\CollisionDetection\AABB.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />

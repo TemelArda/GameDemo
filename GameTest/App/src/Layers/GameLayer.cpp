@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "../include/GameLayer.h"
-#include "../include/Renderer/Renderer.h"
-#include "../include/System/MeshRendererSystem.h"
-#include "../include/System/PhysicsWorld.h"
+#include "../../include/Layers/GameLayer.h"
+#include "../../include/Renderer/Renderer.h"
+#include "../../include/System/MeshRendererSystem.h"
+#include "../../include/System/PhysicsWorld.h"
 
 namespace Core
 {

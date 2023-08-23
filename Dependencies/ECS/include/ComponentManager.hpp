@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <optional>
 #include "Logger.h"
+#include <cassert>
 
 namespace Core_ECS
 {
@@ -81,7 +82,7 @@ void ComponentManager::AddComponent(Entity entity, const T& component)
 	if (mComponentIdMap.find(typeName) == mComponentIdMap.end())
 	{
 		LOG_WARNING("Component type not registered");
-		return;
+		assert(false);
 	}
 	auto c = std::static_pointer_cast<ComponentContainer<T>>(mComponentContainers[typeName]);
 	c->AddComponentData(entity, component);
@@ -105,7 +106,7 @@ void ComponentManager::RemoveComponent(Entity entity)
 	const char* typeName = typeid(T).name();
 	if (mComponentIdMap.find(typeName) == mComponentIdMap.end())
 	{
-		LOG_WARNING("Component type not registered");
+		LOG_ERROR("COMPONENT CAN'T BE REMOVED, type not registered");
 		return;
 	}
 	GetComponentArray<T>().value()->RemoveComponentData(entity);
@@ -117,8 +118,8 @@ T& ComponentManager::GetComponent(Entity entity)
 	const char* typeName = typeid(T).name();
 	if (mComponentIdMap.find(typeName) == mComponentIdMap.end())
 	{
-		LOG_WARNING("Component type not registered");
-		return T();
+		LOG_WARNING("CAN'T GET COMPONENT!\nComponent type not registered");
+		assert(false);
 	}
 	return GetComponentArray<T>().value()->GetComponent(entity);
 }

@@ -2,7 +2,7 @@
 #include "Renderer/Shader.h"
 #include "Renderer/Texture.h"
 #include "Renderer/VertexArray.h"
-#include "Material.h"
+#include "Materials/Material.h"
 #include <memory>
 #include <unordered_map>
 
@@ -29,6 +29,8 @@ public:
 
 	static std::shared_ptr<Core_Renderer::Shader> LoadShader(const std::string& filename, const std::string& name);
 
+	static std::shared_ptr<Core_Renderer::VertexArray> LoadVertexArray(const std::string& filename, const std::string& name);
+
 	static std::shared_ptr<Core_Renderer::VertexArray> LoadVertexArray(const std::shared_ptr<Core_Renderer::VertexBuffer>& vb, 
 		const std::shared_ptr<Core_Renderer::IndexBuffer>& ib, const std::string& name);
 
@@ -43,7 +45,7 @@ public:
 	static std::shared_ptr<Material> GetMaterial(const std::string& name);
 
 	static std::shared_ptr<Core_Renderer::Texture> GetWhiteTexture();
-
+	
 	static const std::shared_ptr<Core_Renderer::Shader> GetDefaultShader();
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetQuadVertexArray();
@@ -55,8 +57,6 @@ public:
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetSphereVertexArray();
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetMonkeyVertexArray();
-
-	static const std::shared_ptr<Core_Renderer::VertexArray> GetBalbVertexArray();
 
 	static std::shared_ptr<Material> GetDefaultMaterial();
 

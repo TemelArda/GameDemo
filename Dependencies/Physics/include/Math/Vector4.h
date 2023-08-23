@@ -146,7 +146,7 @@ inline void Vector4::SetToZero() noexcept
 
 inline const numeral Core_Math::Vector4::Magnitude() const
 {
-	return sqrt(x * x + y * y + z * z + w * w);
+	return sqrtf(x * x + y * y + z * z + w * w);
 }
 
 inline const numeral Core_Math::Vector4::MagnitudeSquared() const

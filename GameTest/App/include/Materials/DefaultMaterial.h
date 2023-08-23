@@ -1,51 +1,18 @@
 #pragma once
-#include "Renderer/Shader.h"
-#include "Renderer/Texture.h"
-#include <memory>
+#include "../Renderer/Shader.h"
+#include "../Renderer/Texture.h"
 #include "Math/Vector3.h"
-
+#include "Material.h"
 
 namespace Core
 {
-using MaterialID = uint32_t;
-
-class Material
-{
-public:
-	//implement rule of 5
-	
-	Material() = default;
-
-	~Material() = default;
-
-	Material(const Material& other) = default;
-
-	Material(Material&& other) = default;
-
-	Material& operator=(const Material& other) = default;
-
-	Material& operator=(Material&& other) = default;
-
-	virtual void Bind() = 0;
-
-	virtual void Unbind() = 0;
-
-	virtual MaterialID GetMaterialID() = 0;
-
-	virtual uint32_t GetShaderID() = 0;
-
-	virtual std::shared_ptr<Core_Renderer::Shader> GetShader() const = 0;
-protected :
-	static MaterialID mNextMaterialId;
-};
-
 class  DefaultMaterial : public Material
 {
 public:
 	Core_Math::Vector3 AmbientColor;
-						  
+
 	Core_Math::Vector3 DiffuseColor;
-						  
+
 	Core_Math::Vector3 SpecularColor;
 
 	float Shininess;
@@ -94,6 +61,5 @@ private:
 	std::shared_ptr<Core_Renderer::Shader> mShader;
 
 	MaterialID mId;
-
 };
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Layer.h"
-#include "Scene.h"
+#include "../Scene.h"
 #include <memory>
 
 namespace Core_Renderer

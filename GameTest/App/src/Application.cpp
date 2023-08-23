@@ -2,7 +2,8 @@
 #include "../include/Application.h"
 #include "../include/Event/Event.h"
 #include "../include/Renderer/Renderer.h"
-#include "../include/GameLayer.h"
+#include "../include/Layers/GameLayer.h"
+#include "../include/Layers/DebugLayer.h"
 #include "../include/Components.h"
 #include "../include/System/MeshRendererSystem.h"
 #include "../include/System/PhysicsWorld.h"
@@ -21,6 +22,7 @@ void Application::Initilize()
 		mRegistry = std::make_shared<Core_ECS::Registry>();
 	
 	ResourceManager::GetInstance().Initilize();
+	
 	mRenderer->PrintRenderAPI();
 	
 	mRegistry->Initilize();
@@ -46,6 +48,10 @@ void Application::Initilize()
 		physicsWorld,
 		mRegistry);
 	PushLayer(gameLayer);
+
+
+	const auto debugLayer = std::make_shared<DebugLayer>(mRenderer, physicsWorld);
+	PushOverlay(debugLayer);
 
 	//Dispatcher workflow Example
 	mDispatcher->Subscribe(BIND_LISTENER_FUNCTION(gameLayer, GameLayer::OnEvent), EventType::Default);

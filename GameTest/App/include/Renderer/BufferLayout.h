@@ -22,7 +22,7 @@ enum class ShaderDataType
 	Bool
 };
 
-static std::tuple<uint32_t, uint32_t> ShaderDataToSizeAndCount(ShaderDataType t)
+static std::tuple<uint32_t, uint32_t> ShaderDataToSizeAndCount(ShaderDataType t) noexcept
 {
 	switch (t)
 	{
