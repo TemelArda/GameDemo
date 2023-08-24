@@ -52,9 +52,9 @@ private:
 
 	int GetUniformLocation(const std::string& name);
 	
-	std::tuple<std::string, std::string> ParseShader(const std::string& fp);
+	std::tuple<const std::string, const std::string, const std::string>  ParseShader(const std::string& fp);
 
-	void CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
+	void CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geomShader = "");
 	
 	ShaderID CompileShader(const std::string& source, uint32_t type);
 

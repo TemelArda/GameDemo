@@ -40,18 +40,19 @@ void Application::Initilize()
 	mRegisteredSystems.insert(std::make_pair("PhysicsWorld", mRegistry->RegisterSystem(physicsWorld, { transformId, rigidBodyId })));
 	/// End of Registering Systems
 
-
 	// Initilize the layer stack with the game layer
+	const auto debugLayer = std::make_shared<DebugLayer>(mRenderer, physicsWorld);
+	PushLayer(debugLayer);
+	
 	const auto gameLayer = std::make_shared<GameLayer>(
 		mRenderer,
 		meshRendererSystem,
 		physicsWorld,
 		mRegistry);
 	PushLayer(gameLayer);
+	
 
 
-	const auto debugLayer = std::make_shared<DebugLayer>(mRenderer, physicsWorld);
-	PushOverlay(debugLayer);
 
 	//Dispatcher workflow Example
 	mDispatcher->Subscribe(BIND_LISTENER_FUNCTION(gameLayer, GameLayer::OnEvent), EventType::Default);

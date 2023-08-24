@@ -5,6 +5,7 @@
 #include "Materials/Material.h"
 #include <memory>
 #include <unordered_map>
+#include <optional>
 
 namespace Core
 {
@@ -36,29 +37,25 @@ public:
 
 	static void LoadMaterial(std::shared_ptr<Material> mat, const std::string& name);
 
-	static std::shared_ptr<Core_Renderer::Texture>GetTexture(const std::string& name);
+	static std::optional<std::shared_ptr<Core_Renderer::Texture>> GetTexture(const std::string& name);
 			 
-	static std::shared_ptr<Core_Renderer::Shader> GetShader(const std::string& name);
+	static  std::optional<std::shared_ptr<Core_Renderer::Shader>> GetShader(const std::string& name);
 			 
-	static std::shared_ptr<Core_Renderer::VertexArray> GetVertexArray(const std::string& name);
+	static  std::optional<std::shared_ptr<Core_Renderer::VertexArray>> GetVertexArray(const std::string& name);
 			 
-	static std::shared_ptr<Material> GetMaterial(const std::string& name);
+	static  std::optional<std::shared_ptr<Material>> GetMaterial(const std::string& name);
 
 	static std::shared_ptr<Core_Renderer::Texture> GetWhiteTexture();
 	
 	static const std::shared_ptr<Core_Renderer::Shader> GetDefaultShader();
+	
+	static std::shared_ptr<Material> GetDefaultMaterial();
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetQuadVertexArray();
 
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetCubeVertexArray();
 
-	static const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCube2VertexArray();
-
 	static const std::shared_ptr<Core_Renderer::VertexArray> GetSphereVertexArray();
-
-	static const std::shared_ptr<Core_Renderer::VertexArray> GetMonkeyVertexArray();
-
-	static std::shared_ptr<Material> GetDefaultMaterial();
 
 private:
 	

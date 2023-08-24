@@ -10,7 +10,8 @@ namespace Core
 Camera::Camera()
 {
 	SetProjectionMatrixToPerspective(PI / 4.0f, APP_ASPECT_RATIO, 0.1f, 100.0f);
-	mTransform.mPosition = { 0.0f, 0.0f, -10 };
+	mTransform.mPosition = { 0.0f, 0.0f, 10 };
+	mTransform.mRotation = Core_Math::Quaternion::FromEuler({ 0.0f, PI, 0.0f });
 	SetViewMatrix();
 }
 

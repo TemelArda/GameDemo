@@ -11,5 +11,6 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <optional>
 
 // TODO: reference additional headers your program requires here

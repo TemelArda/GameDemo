@@ -34,7 +34,7 @@ Texture::Texture(const std::string& fileName)
 	delete [] data;
 }
 Texture::Texture()
-	:mRendererID(0), mWidth(1.0), mHeight(1.0), mBitPPixel(0)
+	:mRendererID(0), mWidth(1), mHeight(1), mBitPPixel(0)
 {
 	//mFilePath = "";
 	glCreateTextures(GL_TEXTURE_2D, 1, &mRendererID);

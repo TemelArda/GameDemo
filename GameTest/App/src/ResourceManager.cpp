@@ -143,7 +143,7 @@ std::shared_ptr<Core_Renderer::Shader> ResourceManager::LoadShader(const std::st
 
 std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::LoadVertexArray(const std::string& filename, const std::string& name)
 {
-	auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(CUBE_FILE_NAME);
+	auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(filename);
 	const auto& modelCube = LoadObj(fp);
 	if (!modelCube.has_value())
 		return nullptr;
@@ -165,68 +165,62 @@ void ResourceManager::LoadMaterial(const std::shared_ptr<Material> mat, const st
 {
 	mMaterials.insert(std::make_pair(name, mat));
 }
-inline std::shared_ptr<Core_Renderer::Texture> ResourceManager::GetTexture(const std::string& name)
+
+std::optional<std::shared_ptr<Core_Renderer::Texture>> ResourceManager::GetTexture(const std::string& name)
 {
 	if(mTextures.find(name) == mTextures.end())
-		assert(false);
+		return { };
 	return mTextures.at(name);
 }
-inline std::shared_ptr<Core_Renderer::Shader> ResourceManager::GetShader(const std::string& name)
+
+std::optional<std::shared_ptr<Core_Renderer::Shader>> ResourceManager::GetShader(const std::string& name)
 {
 	if (mShaders.find(name) == mShaders.end())
-		assert(false);
+		return { };
 	return mShaders.at(name);
 }
-inline std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetVertexArray(const std::string& name)
+
+std::optional<std::shared_ptr<Core_Renderer::VertexArray>> ResourceManager::GetVertexArray(const std::string& name)
 {
 	if (mVertexArrays.find(name) == mVertexArrays.end())
-		assert(false);
+		return { };
 	return mVertexArrays.at(name);
 }
-inline std::shared_ptr<Material> ResourceManager::GetMaterial(const std::string& name)
+
+std::optional<std::shared_ptr<Material>> ResourceManager::GetMaterial(const std::string& name)
 {
 	if (mMaterials.find(name) == mMaterials.end())
-		assert(false);
+		return { };
 	return mMaterials.at(name);
 }
 
 std::shared_ptr<Core_Renderer::Texture> ResourceManager::GetWhiteTexture()
 {
-	return GetTexture("White");
+	return mTextures.at("White");
 }
 
 const std::shared_ptr<Core_Renderer::Shader> ResourceManager::GetDefaultShader()
 {
-	return GetShader("Default");
+	return mShaders.at("Default");
 }
 
 const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetQuadVertexArray()
 {
-	return GetVertexArray("Quad");
+	return mVertexArrays.at("Quad");
 }
 
 const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCubeVertexArray()
 {
-	return GetVertexArray("Cube");
-}
-
-const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetCube2VertexArray()
-{
-	return GetVertexArray("Cube2");
+	return mVertexArrays.at("Cube");
 }
 
 const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetSphereVertexArray()
 {
-	return GetVertexArray("Sphere");
-}
-
-const std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::GetMonkeyVertexArray()
-{
-	return GetVertexArray("Monkey");
+	return mVertexArrays.at("Sphere");
 }
 
 std::shared_ptr<Material> ResourceManager::GetDefaultMaterial()
 {
-	return GetMaterial("Default");
+	return mMaterials.at("Default");
 }
 } // namespace Core

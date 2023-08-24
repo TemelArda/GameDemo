@@ -17,7 +17,7 @@ Shader::Shader()
 	: mRendererID(0)
 {
 	mFilePath = PATH_TO_DEFAULT_SHADER;
-	auto [vertexShader, fragmentShader] = ParseShader(mFilePath);
+	auto [vertexShader, fragmentShader, geometryShader] = ParseShader(mFilePath);
 	CreateShader(vertexShader, fragmentShader);
 }
 
@@ -25,8 +25,8 @@ Shader::Shader(const std::string& filename)
 	: mRendererID(0)
 {
 	mFilePath = PATH_TO_SHADERS + filename;
-	auto [vertexShader, fragmentShader] = ParseShader(mFilePath);
-	CreateShader(vertexShader, fragmentShader);
+	auto& [vertexShader, fragmentShader, geomShader] = ParseShader(mFilePath);
+	CreateShader(vertexShader, fragmentShader, geomShader);
 }
 
 Shader::~Shader()
@@ -88,16 +88,16 @@ int Shader::GetUniformLocation(const std::string& name)
 	}
 	return loc;
 }
-std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
+std::tuple<const std::string, const std::string, const std::string> Shader::ParseShader(const std::string& fp)
 {
 	enum class ShaderType
 	{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
+		NONE = -1, VERTEX = 0, FRAGMENT = 1, GEOMETRY = 2
 	};
 	
 	std::ifstream stream(fp);
 	std::string line;
-	std::stringstream ss[2];
+	std::stringstream ss[3];
 	ShaderType type = ShaderType::NONE;
 
 
@@ -107,8 +107,10 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 		{
 			if (line.find("vertex") != std::string::npos)
 				type = ShaderType::VERTEX;
-			else
+			else if (line.find("fragment") != std::string::npos)
 				type = ShaderType::FRAGMENT;
+			else
+				type = ShaderType::GEOMETRY;
 		}
 		else
 		{
@@ -117,27 +119,39 @@ std::tuple<std::string, std::string> Shader::ParseShader(const std::string& fp)
 	}
 	//mShaderSource = ss[0].str() + '\n' + ss[1].str();
 	stream.close();
-	return {ss[0].str(), ss[1].str()};
+	return {ss[0].str(), ss[1].str(), ss[2].str()};
 }
 
-void Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader)
+void Shader::CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geomShader)
 {
 	mRendererID = glCreateProgram();
-	ShaderID vertexShaderId = CompileShader(vertexShader, GL_VERTEX_SHADER);
-	ShaderID fragmentShaderId = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
-
-	//Link the shaders to the program
-	glAttachShader(mRendererID, vertexShaderId);
-	glAttachShader(mRendererID, fragmentShaderId);
-	glLinkProgram(mRendererID);
-	glValidateProgram(mRendererID);
 	
-   //Delete the shaders
-	//glDetachShader(mRendererID, vertexShaderId);
-	//glDetachShader(mRendererID, fragmentShaderId);
+	ShaderID vertexShaderId = CompileShader(vertexShader, GL_VERTEX_SHADER);
+	glAttachShader(mRendererID, vertexShaderId);
 	glDeleteShader(vertexShaderId);
+	
+	ShaderID fragmentShaderId = CompileShader(fragmentShader, GL_FRAGMENT_SHADER);
+	glAttachShader(mRendererID, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 
+	if (!geomShader.empty())
+	{
+		ShaderID geometryShaderId = CompileShader(geomShader, GL_GEOMETRY_SHADER);
+		glAttachShader(mRendererID, geometryShaderId);
+		//glDeleteShader(geometryShaderId);
+	}
+
+	//Link the shaders to the program
+	GLint params = 0;
+	glLinkProgram(mRendererID);
+	glValidateProgram(mRendererID);
+	glGetProgramiv(mRendererID,
+		GL_VALIDATE_STATUS,
+		&params);
+	if (params != GL_TRUE)
+	{
+		LOG_ERROR("Shader program {} failed to validate", mFilePath);
+	}
 }
 
 uint32_t Shader::CompileShader(const std::string& source, uint32_t type)

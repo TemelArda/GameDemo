@@ -50,22 +50,28 @@ const float Scene::GetElapsedTimeInMilliSeconds() const
 void Scene::InitilizeEntities()
 {
 	Core_ECS::Entity player = mRegistry->CreateEntity();
-	TransformComponent playerTransform;
-	playerTransform.transform.Translate({ 0.0f, 10.0f, 0.0f });
-	mRegistry->AddComponent<TransformComponent>(player, playerTransform);
 	
-
-	MeshComponent playerMesh(
-		ResourceManager::GetInstance().GetCube2VertexArray(), 
-		ResourceManager::GetInstance().GetMaterial("BlueEyes")
-		);
-	mRegistry->AddComponent<MeshComponent>(player, playerMesh);
+	TransformComponent playerTransform;
+	playerTransform.transform.Translate({ 2.5f, 10.0f, 0.0f });
+	mRegistry->AddComponent<TransformComponent>(player, playerTransform);
 
 	RigidBodyComponent playerRigidBody;
 	playerRigidBody.Mass = 1.0f;
 	playerRigidBody.Drag = 1.0f;
 	//playerRigidBody.UseGravity = false;
 	mRegistry->AddComponent<RigidBodyComponent>(player, playerRigidBody);
+	
+	const auto vao = ResourceManager::GetInstance().GetVertexArray("Monkey");
+	const auto material = ResourceManager::GetInstance().GetMaterial("PhysicsDebug");
+	
+	if (!vao.has_value() || !material.has_value())
+	{
+		LOG_ERROR("Failed to load mesh or material");
+		return;
+	}
+
+	MeshComponent playerMesh(vao.value(), material.value());
+	mRegistry->AddComponent<MeshComponent>(player, playerMesh);
 }
 void Scene::InitilizeResources()
 {
@@ -109,6 +115,6 @@ void Scene::InitilizeResources()
 	const auto& materialMonkey = std::make_shared<DefaultMaterial>();
 	materialMonkey->Texture = textureMonkey;
 	materialMonkey->Shininess = 10.0f;
-	ResourceManager::LoadMaterial(materialMonkey, "MaterialMonkey");
+	ResourceManager::LoadMaterial(materialMonkey, "Monkey");
 }
 }// namespace Core 

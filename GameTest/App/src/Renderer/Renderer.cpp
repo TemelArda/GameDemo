@@ -61,8 +61,8 @@ void Renderer::SubmitAABBObject(Core_Math::Mat4x4&& t)
 
 void Renderer::EndScene()
 {
-	flush();	
 	flushAABBObjects();
+	flush();	
 }
 
 void Renderer::flush()
@@ -110,12 +110,12 @@ void Renderer::flush()
 
 void Renderer::flushAABBObjects()
 {
-	if (mAABBObjectTransform.empty() || !mAABBMesh)
+	if (!mAABBMesh)
 		return;
+	mAABBMesh->GetMaterial()->Bind();
+	
 	const auto& shader = mAABBMesh->GetMaterial()->GetShader();
 	const auto& vao = mAABBMesh->GetVertexArray();
-
-	shader->Bind();
 	shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
 	vao->Bind();
 	vao->GetIndexBuffer()->Bind();
@@ -126,7 +126,7 @@ void Renderer::flushAABBObjects()
 
 		shader->SetUniformMat4f("u_Transform", transform);
 		RenderCommand::DrawIndexed(vao);
-		mRenderSequence.pop_front();
+		mAABBObjectTransform.pop_front();
 	}
 
 	shader->Unbind();

@@ -1,17 +1,24 @@
 #pragma once
 #include "Material.h"
 #include "Math/Vector3.h"
-
+#include "Math/Vector4.h"
 
 namespace Core
 {
-class DebugMaterial : public Material
+class PhysicsDebugMaterial : public Material
 {
 public:
-	Core_Math::Vector3 color;
-	DebugMaterial();
+	Core_Math::Vector4 Color;
 
-	DebugMaterial(Core_Math::Vector3 color);
+	Core_Math::Vector3 WireframeColor;
+	
+	float WireframeSmoothing;
+	
+	float WireframeThickness;
+
+	PhysicsDebugMaterial();
+
+	PhysicsDebugMaterial(Core_Math::Vector4 color);
 
 	virtual void Bind() override;
 	
