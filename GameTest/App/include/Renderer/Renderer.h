@@ -16,8 +16,6 @@ namespace Core_Renderer
 
 class VertexArray;
 
-class Shader;
-
 class Renderer
 {
 private:
@@ -47,8 +45,6 @@ public:
 
 	~Renderer() = default;
 
-	void InitilizeSkyBox(std::shared_ptr<Core::Mesh>& mesh);
-
 	void BeginScene(const std::weak_ptr<Core::Scene> scene) const;
 
 	void Submit(const std::weak_ptr<Core::Mesh> mesh, const Core_Math::Mat4x4&& t = Core_Math::Mat4x4::Identity());
@@ -72,10 +68,6 @@ private:
 
 	std::shared_ptr<Core::Mesh> mAABBMesh;
 	
-	std::shared_ptr<Core::Mesh> mSkyBoxMesh;
-
-	void DrawSkyBox() const;
-
 	void flush();
 
 	void flushAABBObjects();

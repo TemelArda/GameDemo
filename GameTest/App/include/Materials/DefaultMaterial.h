@@ -1,12 +1,8 @@
 #pragma once
+#include "../Renderer/Shader.h"
 #include "../Renderer/Texture.h"
 #include "Math/Vector3.h"
 #include "Material.h"
-
-namespace Core_Renderer
-{
- class Texture;
-}
 
 namespace Core
 {
@@ -32,15 +28,34 @@ public:
 
 	~DefaultMaterial() = default;
 
-	virtual void SetUniforms() const override;
+	virtual std::shared_ptr<Core_Renderer::Shader> GetShader() const override
+	{
+		return mShader;
+	}
 
-	virtual const MaterialID GetMaterialID() const override
+	virtual void Bind() override
+	{
+		mShader->Bind();
+		mShader->SetUniform3f("u_Ambient_product", AmbientColor);
+		mShader->SetUniform3f("u_Diffuse_product", DiffuseColor);
+		mShader->SetUniform3f("u_Specular_product", SpecularColor);
+		mShader->SetUniform1f("u_Shininess", Shininess);
+		Texture->Bind();
+		mShader->SetUniform1i("u_Texture", 0);
+	}
+
+	virtual void Unbind() override
+	{
+		mShader->Unbind();
+		Texture->Unbind();
+	}
+
+	virtual MaterialID GetMaterialID() override
 	{
 		return mId;
 	}
 
-	virtual const Core_Renderer::ProgramID GetShaderID() const override;
-
+	virtual uint32_t GetShaderID() override;
 private:
 
 	std::shared_ptr<Core_Renderer::Shader> mShader;

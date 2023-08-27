@@ -1,17 +1,10 @@
 #include "stdafx.h"
 #include "../include/ResourceManager.h"
-#include "../include/Resources.h"
+#include "../include/Renderer/Constants.h"
 #include "../include/Materials/DefaultMaterial.h"
-#include "../include/Materials/SkyboxMaterial.h"
 #include "../include/ModelLoader.h"
-#include "../include/Renderer/Shader.h"
-#include "../include/Renderer/Texture.h"
-#include "../include/Renderer/VertexArray.h"
-#include "../include/Renderer/Cubemap.h"
 #include <assert.h>
 #include <mutex>
-#include <filesystem>
-
 
 namespace
 {
@@ -32,7 +25,7 @@ static float vertexDataCube[] = {
 	 -0.5f, 0.5f, 0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-right  right face
 	 -0.5f, 0.5f, -0.5f, 1.0, 0.0, 0.0, 0.0, 0.0,// top-left right face
 
-	 -0.5f, -0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-left  back face
+	 -0.5f, -0.5f,  0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-left  back face
 	 0.5f, -0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// bot-right back face
 	 0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-right  back face
 	 -0.5f, 0.5f, 0.5f, 0.0, 0.0, -1.0, 0.0, 0.0,// top-left back face
@@ -47,43 +40,10 @@ static float vertexDataCube[] = {
 	 -0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-right  top face
 	 0.5f, 0.5f, 0.5f, 0.0, 1.0, 0.0, 0.0, 0.0,// top-left top face
 
-	 0.5f, -0.5f, -0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-left  bot face
+		0.5f, -0.5f, -0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-left  bot face
 	 -0.5f, -0.5f, -0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// bot-right bot face
 	 -0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-right  bot face
 	 0.5f, -0.5f, 0.5f, 0.0, -1.0, 0.0, 0.0, 0.0,// top-left bot face
-};
-
-static float skyBoxVertex [] =
-{
-	-1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, -1.0f,
-	 1.0f,  1.0f, -1.0f,
-	 - 1.0f, 1.0f, -1.0f,
-
-	 - 1.0f, -1.0f, -0.5,
-	 - 1.0f, -1.0f, 1.0f,
-	 - 1.0f, 1.0f, 1.0f,
-	 -1.0f, 1.0f, -1.0f,
-
-	 - 1.0f, -1.0f, 1.0f,
-	 1.0f, -1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 -1.0f, 1.0f, 1.0f,
-
-	 1.0f, -1.0f, -1.0f,
-	 1.0f, -1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f, -1.0f,
-
-	 1.0f, 1.0f, -1.0f,
-	 -1.0f, 1.0f, -1.0f
-	 - 1.0f, 1.0f, 1.0f,
-	 1.0f, 1.0f, 1.0f,
-
-	 1.0f, -1.0f, -1.0f,
-	 - 1.0f, -1.0f, -0.5,
-	 - 1.0f, -1.0f, 1.0f,
-	 1.0f, -1.0f, 1.0f,
 };
 
 static uint32_t indicesCube[] = {
@@ -116,32 +76,17 @@ namespace Core
 	std::once_flag flag1;
 void ResourceManager::Initilize()
 {
-	
 	std::call_once(flag1, []() {
 		// Load default resources
-		uint32_t color = 0xffffffff;
-		LoadTexture(&color, 1, 1, "White");
-		std::vector<std::string> skyBoxFiles;
 
-		Core_Renderer::CubeMapFilePath skyboxFilePaths = 
-		{
-			"skyrender0001.bmp",
-			"skyrender0002.bmp",
-			"skyrender0003.bmp",
-			"skyrender0004.bmp",
-			"skyrender0005.bmp",
-			"skyrender0006.bmp"
-		};
-		
-		LoadCubeMap(skyboxFilePaths, "Skybox");
-		LoadShader("BasicShader.glsl", "Default");
-		LoadShader("Skybox.glsl", "Skybox");
+		const auto& whiteTexture = std::make_shared<Core_Renderer::Texture>();
+		mTextures.insert(std::make_pair("White", whiteTexture));
+
+		const auto& defaultShader = std::make_shared<Core_Renderer::Shader>();
+		mShaders.insert(std::make_pair("Default", defaultShader));
 
 		const auto& defaultMaterial = std::make_shared<DefaultMaterial>();
 		mMaterials.insert(std::make_pair("Default", defaultMaterial));
-
-		const auto& skyBoxMaterial = std::make_shared<SkyboxMaterial>();
-		mMaterials.insert(std::make_pair("Skybox", skyBoxMaterial));
 
 		auto IboCube = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 36);
 		auto VboCube = std::make_shared<Core_Renderer::VertexBuffer>(vertexDataCube, 24 * 8 * sizeof(float), 24);
@@ -166,22 +111,10 @@ void ResourceManager::Initilize()
 			};
 			VboQuad->SetLayout(layout);
 		}
-
-		auto IboSkybox = std::make_shared<Core_Renderer::IndexBuffer>(indicesCube, 36);
-		auto VboSkybox = std::make_shared<Core_Renderer::VertexBuffer>(skyBoxVertex, 24 * 3 * sizeof(float), 24);
-
-		{
-			Core_Renderer::BufferLayout layout = {
-				{Core_Renderer::ShaderDataType::Float3, "a_Position"},
-			};
-			VboSkybox->SetLayout(layout);
-		}
 		
 		LoadVertexArray(VboCube, IboCube, "Cube");
 		
 		LoadVertexArray(VboQuad, IboQuad, "Quad");
-
-		LoadVertexArray(VboSkybox, IboSkybox, "Skybox");
 
 		LoadVertexArray(CUBE_FILE_NAME, "Cube2");
 
@@ -194,47 +127,23 @@ void ResourceManager::Initilize()
 void ResourceManager::Shutdown()
 {
 }
-
-std::shared_ptr<Core_Renderer::Texture> ResourceManager::LoadTexture(const void* data, const uint32_t width,  const uint32_t height, const std::string& name)
-{
-	auto& texture = std::make_shared<Core_Renderer::Texture>(data, width, height);
-	mTextures.insert(std::make_pair(name, texture));
-	return texture;
-}
-
 std::shared_ptr<Core_Renderer::Texture> ResourceManager::LoadTexture(const std::string& filename, const std::string& name)
 {
-	const auto& fp = PATH_TO_TEXTURES + std::string(filename);
-	auto& texture = std::make_shared<Core_Renderer::Texture>(fp);
+	auto& texture = std::make_shared<Core_Renderer::Texture>(filename);
 	mTextures.insert(std::make_pair(name, texture));
 	return texture;
-}
-
-std::shared_ptr<Core_Renderer::Cubemap> ResourceManager::LoadCubeMap(const Core_Renderer::CubeMapFilePath& filePaths, const std::string& name)
-{
-	const Core_Renderer::CubeMapFilePath files {
-		PATH_TO_SKYBOX + filePaths.Right,
-		PATH_TO_SKYBOX + filePaths.Left,
-		PATH_TO_SKYBOX + filePaths.Top,
-		PATH_TO_SKYBOX + filePaths.Bottom,
-		PATH_TO_SKYBOX + filePaths.Front,
-		PATH_TO_SKYBOX + filePaths.Back};
-	const auto cubeMap = std::make_shared<Core_Renderer::Cubemap>(files);
-	mTextures.insert(std::make_pair(name, cubeMap));
-	return cubeMap;
 }
 
 std::shared_ptr<Core_Renderer::Shader> ResourceManager::LoadShader(const std::string& filename, const std::string& name)
 {
-	const auto& fp = PATH_TO_SHADERS + std::string(filename);
-	auto& shader = Core_Renderer::LoadShader(fp);
+	auto& shader = std::make_shared<Core_Renderer::Shader>(filename);
 	mShaders.insert(std::make_pair(name, shader));
 	return shader;
 }
 
 std::shared_ptr<Core_Renderer::VertexArray> ResourceManager::LoadVertexArray(const std::string& filename, const std::string& name)
 {
-	const auto& fp = PATH_TO_MODELS + std::string(filename);
+	auto& fp = Core_Renderer::PATH_TO_MODELS + std::string(filename);
 	const auto& modelCube = LoadObj(fp);
 	if (!modelCube.has_value())
 		return nullptr;

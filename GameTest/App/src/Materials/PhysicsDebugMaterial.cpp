@@ -36,22 +36,32 @@ Color(color), WireframeColor(.1, .1, .1), WireframeSmoothing(0.1f), WireframeThi
 }
 
 
-void PhysicsDebugMaterial::SetUniforms() const
+void PhysicsDebugMaterial::Bind()
 {
-	Core_Renderer::SetUniform4f(mShader->Id, "u_Color", Color);
-	Core_Renderer::SetUniform3f(mShader->Id, "u_WireframeColor", WireframeColor);
-	Core_Renderer::SetUniform1f(mShader->Id, "u_WireframeSmoothing", WireframeSmoothing);
-	Core_Renderer::SetUniform1f(mShader->Id, "u_WireframeThickness", WireframeThickness);
+	mShader->Bind();
+	mShader->SetUniform4f("u_Color", Color);
+	mShader->SetUniform3f("u_WireframeColor", WireframeColor);
+	mShader->SetUniform1f("u_WireframeSmoothing", WireframeSmoothing);
+	mShader->SetUniform1f("u_WireframeThickness", WireframeThickness);
 }
 
-const MaterialID PhysicsDebugMaterial::GetMaterialID() const
+void PhysicsDebugMaterial::Unbind()
+{
+	mShader->Unbind();
+}
+
+MaterialID PhysicsDebugMaterial::GetMaterialID()
 {
     return mId;
 }
 
-const Core_Renderer::ProgramID PhysicsDebugMaterial::GetShaderID() const
+uint32_t PhysicsDebugMaterial::GetShaderID()
 {
-    return mShader->Id;
+    return mShader->GetID();
 }
 
+std::shared_ptr<Core_Renderer::Shader> PhysicsDebugMaterial::GetShader() const
+{
+    return mShader;
+}
 }

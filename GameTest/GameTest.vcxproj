@@ -211,10 +211,8 @@
     <ClInclude Include="App\include\Layers\LayerStack.h" />
     <ClInclude Include="App\include\Materials\PhysicsDebugMaterial.h" />
     <ClInclude Include="App\include\Materials\DefaultMaterial.h" />
-    <ClInclude Include="App\include\Materials\SkyboxMaterial.h" />
     <ClInclude Include="App\include\Renderer\BufferLayout.h" />
-    <ClInclude Include="App\include\Renderer\Cubemap.h" />
-    <ClInclude Include="App\include\Resources.h" />
+    <ClInclude Include="App\include\Renderer\Constants.h" />
     <ClInclude Include="App\include\Renderer\IndexBuffer.h" />
     <ClInclude Include="App\include\Renderer\IRendererAPI.h" />
     <ClInclude Include="App\include\ModelLoader.h" />
@@ -247,9 +245,6 @@
   <ItemGroup>
     <ClCompile Include="App\app.cpp" />
     <ClCompile Include="App\DirectSound.cpp" />
-    <ClCompile Include="App\src\Materials\Material.cpp" />
-    <ClCompile Include="App\src\Renderer\Cubemap.cpp" />
-    <ClCompile Include="App\src\Materials\SkyboxMaterial.cpp" />
     <ClCompile Include="App\src\Materials\PhysicsDebugMaterial.cpp" />
     <ClCompile Include="App\src\Layers\DebugLayer.cpp" />
     <ClCompile Include="App\src\System\PhysicsWorld.cpp" />

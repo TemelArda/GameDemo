@@ -62,7 +62,7 @@ void Scene::InitilizeEntities()
 	mRegistry->AddComponent<RigidBodyComponent>(player, playerRigidBody);
 	
 	const auto vao = ResourceManager::GetInstance().GetVertexArray("Monkey");
-	const auto material = ResourceManager::GetInstance().GetMaterial("Monkey");
+	const auto material = ResourceManager::GetInstance().GetMaterial("PhysicsDebug");
 	
 	if (!vao.has_value() || !material.has_value())
 	{

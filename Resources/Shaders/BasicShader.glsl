@@ -24,7 +24,7 @@ uniform mat4 u_VP;
 
 void main()
 {
-    vec4 world_pos = (u_Transform * vec4(postion, 1.0));
+    vec4 world_pos = (u_Transform * vec4(postion, 1));
     
     v_Out.texCoord = texCoord;
     v_Out.normal = normals;
