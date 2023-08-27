@@ -29,7 +29,7 @@ public:
 
 	Mat4x4(const Mat4x4& other) noexcept;
 	
-	Mat4x4(Mat4x4&& other) noexcept;
+	Mat4x4(Mat4x4&& other) noexcept = default;
 
 	Mat4x4& operator=(const Mat4x4& other) noexcept;
 
@@ -50,6 +50,8 @@ public:
 	void SetToIdentity();
 
 	void Transpose();
+
+	Mat4x4 Get3x3Part() const;
 
 	static Mat4x4 Transpose(const Mat4x4& matrix);
 

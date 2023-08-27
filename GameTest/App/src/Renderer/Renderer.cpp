@@ -22,6 +22,11 @@ Renderer::SceneData* Renderer::mSceneData = new Renderer::SceneData;
 
 
 
+void Renderer::InitilizeSkyBox(std::shared_ptr<Core::Mesh>& mesh)
+{
+	mSkyBoxMesh = std::move(mesh);
+}
+
 void Renderer::BeginScene(const std::weak_ptr<Core::Scene> scene) const
 {
 	const auto scenePtr = scene.lock();
@@ -60,17 +65,45 @@ void Renderer::SubmitAABBObject(Core_Math::Mat4x4&& t)
 }
 
 void Renderer::EndScene()
+{	
+	DrawSkyBox();
+	//flushAABBObjects();
+	//flush();	
+}
+
+void Renderer::DrawSkyBox() const
 {
-	flushAABBObjects();
-	flush();	
+	if (!mSkyBoxMesh)
+	{
+		LOG_ERROR("SkyBox mesh is nullptr");
+		return;
+	}
+	RenderCommand::DisableDepthTest();
+
+	const auto& skyBoxMat = mSkyBoxMesh->GetMaterial();
+	const auto& skyBoxVAO = mSkyBoxMesh->GetVertexArray();
+	
+	RenderCommand::BindProgram(skyBoxMat->GetShaderID());
+	skyBoxMat->SetUniforms();
+	SetUniformMat4f(skyBoxMat->GetShaderID(), "u_VP", mSceneData->ViewProjectionMatrix);
+	skyBoxVAO->Bind();
+	skyBoxVAO->GetIndexBuffer()->Bind();
+	RenderCommand::DrawIndexed(skyBoxVAO);
+	
+	RenderCommand::BindProgram(0);
+	RenderCommand::BindCubemap(0);
+
+	RenderCommand::EnableDepthTest();
 }
 
 void Renderer::flush()
 {
 	
+	//TODO: Sort using paralel execution
+	//std::sort(mRenderSequence.begin(), mRenderSequence.end());
 	mRenderSequence.sort();
-	
-	ShaderID currentShader = MAX_UINT32;
+
+	ProgramID currentShader = MAX_UINT32;
 	Core::MaterialID currentMaterial = MAX_UINT32;
 	VertexArrayID currentVAO = MAX_UINT32;
 	
@@ -79,16 +112,15 @@ void Renderer::flush()
 		const auto& data = mRenderSequence.front();
 		if (data.Material->GetShaderID() != currentShader)
 		{
-			const auto& shader = data.Material->GetShader();
+			currentShader = data.Material->GetShaderID();
 			//shader->SetUniform3f("u_LightPosition", mSceneData->LightPosition);
-			shader->Bind();
-			shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
+			RenderCommand::BindProgram(currentShader);
+			SetUniformMat4f(currentShader, "u_VP", mSceneData->ViewProjectionMatrix);
 			//shader->SetUniform1f("u_Time", mSceneData->Time);
-			currentShader = shader->GetID();
 		}
 		if (data.Material->GetMaterialID() != currentMaterial)
 		{
-			data.Material->Bind();
+			data.Material->SetUniforms();
 			currentMaterial = data.Material->GetMaterialID();
 		}
 		if (data.VertexArray->GetID() != currentVAO)
@@ -97,41 +129,41 @@ void Renderer::flush()
 			data.VertexArray->GetIndexBuffer()->Bind();
 			currentVAO = data.VertexArray->GetID();
 		}
-		const auto & shader = data.Material->GetShader();
 		
-		shader->SetUniformMat4f("u_Transform", data.Transform);
+		SetUniformMat4f(currentShader, "u_Transform", data.Transform);
 		RenderCommand::DrawIndexed(data.VertexArray);
-		
-		if(mRenderSequence.size() == 1)
-			data.Material->Unbind();
 		mRenderSequence.pop_front();
 	}
+
+	RenderCommand::BindProgram(0);
+	RenderCommand::BindTexture(0);
 }
 
 void Renderer::flushAABBObjects()
 {
 	if (!mAABBMesh)
 		return;
-	mAABBMesh->GetMaterial()->Bind();
-	
-	const auto& shader = mAABBMesh->GetMaterial()->GetShader();
-	const auto& vao = mAABBMesh->GetVertexArray();
-	shader->SetUniformMat4f("u_VP", mSceneData->ViewProjectionMatrix);
-	vao->Bind();
-	vao->GetIndexBuffer()->Bind();
+	const auto& aabbMat = mAABBMesh->GetMaterial();
+	const auto& aabbVAO = mAABBMesh->GetVertexArray();
+
+	RenderCommand::BindProgram(aabbMat->GetShaderID());
+	mAABBMesh->GetMaterial()->SetUniforms();
+	SetUniformMat4f(aabbMat->GetShaderID(), "u_VP", mSceneData->ViewProjectionMatrix);
+	aabbVAO->Bind();
+	aabbVAO->GetIndexBuffer()->Bind();
 	
 	while(!mAABBObjectTransform.empty())
 	{
 		const auto& transform = mAABBObjectTransform.front();
 
-		shader->SetUniformMat4f("u_Transform", transform);
-		RenderCommand::DrawIndexed(vao);
+		SetUniformMat4f(aabbMat->GetShaderID(), "u_Transform", transform);
+		RenderCommand::DrawIndexed(aabbVAO);
 		mAABBObjectTransform.pop_front();
 	}
 
-	shader->Unbind();
-	vao->Unbind();
-	vao->GetIndexBuffer()->Unbind();
+	RenderCommand::BindProgram(0);
+	aabbVAO->Unbind();
+	aabbVAO->GetIndexBuffer()->Unbind();
 }
 
 

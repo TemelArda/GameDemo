@@ -52,6 +52,21 @@ public:
 		mAPI->DisableBlend();
 	}
 
+	static inline void BindProgram(uint32_t id)
+	{
+		mAPI->BindProgram(id);
+	}
+
+	static inline void BindTexture(uint32_t id, uint32_t slot = 0)
+	{
+		mAPI->BindTexture(id, slot);
+	}
+
+	static inline void BindCubemap(uint32_t id, uint32_t slot = 0)
+	{
+		mAPI->BindCubemap(id, slot);
+	}
+
 private:
 	static IRendererAPI* mAPI;
 };

@@ -20,15 +20,11 @@ public:
 
 	PhysicsDebugMaterial(Core_Math::Vector4 color);
 
-	virtual void Bind() override;
+	virtual void SetUniforms() const override;
 	
-	virtual void Unbind() override;
+	virtual const MaterialID GetMaterialID() const override;
 	
-	virtual MaterialID GetMaterialID() override;
-	
-	virtual uint32_t GetShaderID() override;
-	
-	virtual std::shared_ptr<Core_Renderer::Shader> GetShader() const override;
+	virtual const Core_Renderer::ProgramID GetShaderID() const override;
 
 private:
 	std::shared_ptr<Core_Renderer::Shader> mShader;

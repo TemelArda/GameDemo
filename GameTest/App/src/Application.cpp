@@ -23,9 +23,22 @@ void Application::Initilize()
 	
 	ResourceManager::GetInstance().Initilize();
 	
+	const auto skyBoxMaterial = ResourceManager::GetInstance().GetMaterial("Skybox");
+	const auto skyboxVA = ResourceManager::GetInstance().GetVertexArray("Skybox");
+
+	if(skyBoxMaterial.has_value() && skyboxVA.has_value())
+	{
+		auto& skyBoxMesh = std::make_shared<Mesh>(
+			skyboxVA.value(),
+			skyBoxMaterial.value()
+			);
+		mRenderer->InitilizeSkyBox(skyBoxMesh);
+	}
+
 	mRenderer->PrintRenderAPI();
 	
 	mRegistry->Initilize();
+
 	
 	RegisterComponents();
 	/// Registering Systems
