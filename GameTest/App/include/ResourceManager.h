@@ -1,14 +1,25 @@
 #pragma once
-#include "Renderer/Shader.h"
-#include "Renderer/Texture.h"
-#include "Renderer/VertexArray.h"
-#include "Materials/Material.h"
+
 #include <memory>
 #include <unordered_map>
 #include <optional>
 
+
+namespace Core_Renderer
+{
+struct Shader;
+class Texture;
+class VertexBuffer;
+class IndexBuffer;
+class VertexArray;
+class Cubemap;
+struct CubeMapFilePath;
+}
+
 namespace Core
 {
+class Material;
+
 class ResourceManager
 {
 public:
@@ -26,7 +37,11 @@ public:
 
 	static void Shutdown();
 
+	static std::shared_ptr<Core_Renderer::Texture> LoadTexture(const void* data, const uint32_t width, const uint32_t height, const std::string& name);
+
 	static std::shared_ptr<Core_Renderer::Texture> LoadTexture(const std::string& filename, const std::string& name);
+
+	static std::shared_ptr<Core_Renderer::Cubemap> LoadCubeMap(const Core_Renderer::CubeMapFilePath& filePaths, const std::string& name);
 
 	static std::shared_ptr<Core_Renderer::Shader> LoadShader(const std::string& filename, const std::string& name);
 

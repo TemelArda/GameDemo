@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <tuple>
 
 namespace Core_Math
 {
@@ -11,53 +10,33 @@ namespace Core_Math
 
 namespace Core_Renderer
 {
-using ShaderID = unsigned int;
-class Shader
+using ProgramID = uint32_t;
+
+struct Shader
 {
-
-public:
-	Shader();
-
-	Shader(const std::string& fileName);
-
 	~Shader();
 
-	void Bind() const;
-
-	void Unbind() const;
-
-	void SetUniform4f(const std::string& name, float v1, float v2, float v3, float v4);
-
-	void SetUniform4f(const std::string& name, Core_Math::Vector4 values);
-
-	void SetUniform3f(const std::string& name, float v1, float v2, float v3);
-						
-	void SetUniform3f(const std::string& name, Core_Math::Vector3 values);
-
-	void SetUniform1f(const std::string& name, float value);
-
-	void SetUniform1i(const std::string& name, int value);
-
-	void SetUniformMat4f(const std::string& name, const Core_Math::Mat4x4& m4x4);
-
-	const ShaderID GetID() const { return mRendererID; }
-
-private:
-
-	ShaderID mRendererID;
-
-	std::string mFilePath;
-
-	//std::string mShaderSource;
-
-	int GetUniformLocation(const std::string& name);
+	ProgramID Id{0};
 	
-	std::tuple<const std::string, const std::string, const std::string>  ParseShader(const std::string& fp);
-
-	void CreateShader(const std::string& vertexShader, const std::string& fragmentShader, const std::string& geomShader = "");
-	
-	ShaderID CompileShader(const std::string& source, uint32_t type);
-
+	std::string FilePath;
 };
+
+std::shared_ptr<Shader> LoadShader(const std::string& filePath);
+
+void SetUniform4f(const ProgramID& id, const std::string& name, float v1, float v2, float v3, float v4);
+
+void SetUniform4f(const ProgramID& id, const std::string& name, Core_Math::Vector4 values);
+						
+void SetUniform3f(const ProgramID& id, const std::string& name, float v1, float v2, float v3);
+						
+void SetUniform3f(const ProgramID& id, const std::string& name, Core_Math::Vector3 values);
+						
+void SetUniform1f(const ProgramID& id, const std::string& name, float value);
+										  
+void SetUniform1i(const ProgramID& id, const std::string& name, int value);
+
+void SetUniformMat4f(const ProgramID& id,const std::string& name, const Core_Math::Mat4x4& m4x4);
+
+void SetUniformMat4f(const ProgramID& id,const std::string& name, const Core_Math::Mat4x4&& m4x4);
 
 }
